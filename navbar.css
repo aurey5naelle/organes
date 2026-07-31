@@ -1,0 +1,339 @@
+/* --- VARIABLES ET THÈME CENTRALISÉ ALIGNÉ --- */
+:root {
+    --primary-blue: #1e88e5;       /* Bleu clinique principal */
+    --primary-blue-dark: #1565c0;  /* Survol bleu principal */
+    --primary-green: #2e7d32;      /* Vert d'éthique et d'espoir */
+    --primary-green-dark: #1b5e20; /* Survol vert d'action */
+    --light-green: #e8f5e9;        /* Fond de validation verte */
+    --bg-light: #f4f6f9;           /* Fond clinique général */
+    --white: #ffffff;
+    --dark-text: #2c3e50;          /* Titres et textes sombres */
+    --light-text: #7f8c8d;         /* Sous-titres et légendes */
+    --border-color: #eaeef2;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --sidebar-width: 280px;
+    --transition: all 0.3s ease;
+}
+
+/* --- RÉINITIALISATION GÉNÉRALE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--dark-text);
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* --- BARRE LATÉRALE DE NAVIGATION (SIDEBAR) --- */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background-color: var(--white);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    max-height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    transition: var(--transition);
+}
+
+/* BRANDING / LOGO */
+.sidebar-brand {
+    padding: 24px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.sidebar-brand i {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+}
+
+.sidebar-brand span {
+    color: var(--dark-text);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* MENU DE NAVIGATION AVEC DEFILEMENT */
+.sidebar-menu {
+    padding: 20px 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* UNIFORMISATION STRICTE DU TEXTE DES LIENS */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 24px;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.95rem !important;  /* Taille fixe pour uniformiser */
+    font-weight: 500 !important;   /* Graisse identique */
+    line-height: 1.4;
+    transition: var(--transition);
+    cursor: pointer;
+    border-left: 4px solid transparent;
+}
+
+.menu-item i {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    width: 20px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.menu-item:hover {
+    background-color: var(--bg-light);
+    color: var(--primary-blue);
+}
+
+.menu-item:hover i {
+    color: var(--primary-blue);
+}
+
+/* ÉLÉMENT SELECTIONNÉ / ACTIF */
+.menu-item.active {
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+    border-left-color: var(--primary-blue);
+    font-weight: 600 !important;
+}
+
+.menu-item.active i {
+    color: var(--primary-blue);
+}
+
+/* PIED DE PAGE SIDEBAR (INFO UTILISATEUR & DÉCONNEXION) */
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: #fafbfc;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.user-info {
+    margin-bottom: 15px;
+}
+
+.user-role {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--dark-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.user-mail {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+/* BOUTON DÉCONNEXION */
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--danger-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: var(--transition);
+}
+
+.btn-logout:hover {
+    text-decoration: underline;
+    color: #c0392b;
+}
+
+.btn-logout i {
+    font-size: 1.1rem;
+}
+
+/* --- ZONE DU CONTENU PRINCIPAL --- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    width: calc(100% - var(--sidebar-width));
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- EN-TÊTE PRINCIPAL --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.main-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.subtitle,
+.main-header .subtitle {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* --- BOUTONS D'ACTIONS D'EN-TÊTE ET GÉNÉRAUX --- */
+.btn-primary,
+.btn-primary-action {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+    transition: var(--transition);
+}
+
+.btn-primary:hover,
+.btn-primary-action:hover {
+    background-color: var(--primary-green-dark);
+    box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--dark-text);
+    border: 1px solid var(--border-color);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-light);
+    border-color: var(--light-text);
+}
+
+/* --- PERSONNALISATION SCROLLBAR (DISCRÈTE ET UNIFORME) --- */
+.sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--light-text);
+}
+
+/* --- ADAPTATION RESPONSIVE --- */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: var(--sidebar-width);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-primary-action,
+    .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}

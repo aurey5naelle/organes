@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration de votre Carte - BioÉthique CM</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="carte_donneur.css">
+</head>
+<body>
+
+    <div class="onboarding-container">
+        
+        <header class="onboarding-header">
+            <div class="logo">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span>BioÉthique CM</span>
+            </div>
+            <div class="steps-indicator">
+                <span class="step done"><i class="fa-solid fa-circle-check"></i> Authentification</span>
+                <span class="step-separator"><i class="fa-solid fa-chevron-right"></i></span>
+                <span class="step active">Étape 2 : Votre Carte de Donneur</span>
+            </div>
+        </header>
+
+        <div class="onboarding-welcome">
+            <h1>Félicitations pour votre engagement !</h1>
+            <p>Personnalisez maintenant votre carte numérique de donneur. Elle sera instantanément enregistrée et accessible sur votre tableau de bord.</p>
+        </div>
+
+        <div class="onboarding-grid">
+            
+            <!-- Formulaire -->
+            <div class="setup-card">
+                <div class="setup-card-header">
+                    <h2><i class="fa-solid fa-user-pen"></i> Remplir mes informations</h2>
+                    <p>Ces données figureront de manière sécurisée sur votre carte virtuelle.</p>
+                </div>
+                
+                <form id="donor-form" class="setup-form" action="carte.php" method="post">
+                    <!-- ID utilisateur injecté dynamiquement par JS -->
+                    <input type="hidden" id="input-user-id" name="user_id" value="">
+
+                    <div class="form-group">
+                        <label for="input-name">Nom complet *</label>
+                        <input type="text" id="input-name" name="full_name" placeholder="Ex: Jean-Paul MBARGA" required>
+                    </div>
+
+                    <div class="form-grid-two">
+                        <div class="form-group">
+                            <label for="input-blood">Groupe Sanguin *</label>
+                            <select id="input-blood" name="blood_group" required>
+                                <option value="" disabled selected>Sélectionnez...</option>
+                                <option value="O+">O +</option>
+                                <option value="O-">O -</option>
+                                <option value="A+">A +</option>
+                                <option value="A-">A -</option>
+                                <option value="B+">B +</option>
+                                <option value="B-">B -</option>
+                                <option value="AB+">AB +</option>
+                                <option value="AB-">AB -</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-birth">Année de Naissance *</label>
+                            <input type="number" id="input-birth" name="birth_year" min="1920" max="2008" placeholder="Ex: 1995" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-contact">Personne à prévenir en cas d'urgence *</label>
+                        <input type="text" id="input-contact" name="emergency_contact" placeholder="Ex: Épouse (699-XX-XX-XX)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-organs">Organes pour lesquels vous consentez</label>
+                        <input type="text" id="input-organs" name="consented_organs" value="Tous les organes et tissus (Rein, Cornée...)" placeholder="Ex: Uniquement reins et cornées">
+                    </div>
+
+                    <button type="submit" class="btn-submit-onboarding" id="btn-submit">
+                        Confirmer et accéder au Tableau de Bord <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Aperçu visuel dynamique -->
+            <div class="preview-card-holder">
+                <div class="preview-badge"><i class="fa-solid fa-eye"></i> Aperçu de votre carte en direct</div>
+                
+                <div class="donor-digital-card" id="donor-card">
+                    <div class="card-top-bar">
+                        <span class="country-name"><i class="fa-solid fa-heart-pulse"></i> BIOÉTHIQUE CAMEROUN</span>
+                        <span class="card-title-tag">CARTE DE DONNEUR</span>
+                    </div>
+
+                    <div class="card-middle-row">
+                        <div class="card-chip"></div>
+                        <i class="fa-solid fa-shield-heart emergency-icon"></i>
+                    </div>
+
+                    <div class="card-body-details">
+                        <div class="card-meta">
+                            <span class="card-label">Titulaire</span>
+                            <span class="card-value" id="card-display-name">Votre nom s'affichera ici</span>
+                        </div>
+                        
+                        <div class="card-meta-row">
+                            <div class="card-meta">
+                                <span class="card-label">Né(e) en</span>
+                                <span class="card-value" id="card-display-birth">----</span>
+                            </div>
+                            <div class="card-meta">
+                                <span class="card-label">Groupe Sanguin</span>
+                                <span class="card-value" id="card-display-blood">?</span>
+                            </div>
+                        </div>
+
+                        <div class="card-meta">
+                            <span class="card-label">Organes consentis</span>
+                            <span class="card-value txt-small" id="card-display-organs">Tous les organes et tissus (Rein, Cornée...)</span>
+                        </div>
+
+                        <div class="card-meta">
+                            <span class="card-label">Urgence (Contact)</span>
+                            <span class="card-value txt-small" id="card-display-contact">À compléter</span>
+                        </div>
+                    </div>
+
+                    <div class="card-watermark">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Script JavaScript externe -->
+    <script src="carte.js"></script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+/* --- VARIABLES ET DESIGN CLINIQUE --- */
+:root {
+    --primary-blue: #1e88e5;       /* Bleu médical */
+    --primary-blue-dark: #1565c0;  /* Bleu médical plus foncé pour le survol */
+    --primary-green: #2e7d32;      /* Réception validée (Vert d'espoir) */
+    --light-green: #e8f5e9;        
+    --bg-light: #f4f6f9;           /* Fond de l'application */
+    --white: #ffffff;
+    --dark-text: #2c3e50;          
+    --light-text: #7f8c8d;         
+    --border-color: #eaeef2;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --sidebar-width: 280px;
+    /* Ombres avec relief pour la carte principale */
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.02);
+    --shadow-elevated: 0 10px 30px rgba(30, 136, 229, 0.06), 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+/* --- RÉINITIALISATION --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--dark-text);
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background-color: var(--white);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.sidebar-brand {
+    padding: 24px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-brand i {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 24px;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.menu-item i {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    width: 20px;
+    transition: color 0.3s ease;
+}
+
+.menu-item:hover {
+    background-color: var(--bg-light);
+    color: var(--primary-blue);
+}
+
+.menu-item:hover i {
+    color: var(--primary-blue);
+}
+
+.menu-item.active {
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+    border-left: 4px solid var(--primary-blue);
+    font-weight: 600;
+}
+
+.menu-item.active i {
+    color: var(--primary-blue);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: #fafbfc;
+}
+
+.user-info {
+    margin-bottom: 15px;
+}
+
+.user-role {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.user-mail {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    word-break: break-all;
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--danger-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.btn-logout:hover {
+    text-decoration: underline;
+}
+
+/* --- ZONE PRINCIPALE --- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    width: calc(100% - var(--sidebar-width));
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* --- EN-TÊTE --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.main-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.subtitle {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+/* --- CORRECTION ICI : BOUTON BLEU PAR DÉFAUT --- */
+.btn-refresh {
+    /* Changement du fond en bleu médical */
+    background-color: var(--primary-blue);
+    /* Texte en blanc pour le contraste */
+    color: var(--white);
+    /* Bordure assortie ou masquée */
+    border: 1px solid var(--primary-blue);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+}
+
+.btn-refresh:hover {
+    /* Fond légèrement plus foncé au survol pour l'effet de clic */
+    background-color: var(--primary-blue-dark);
+    color: var(--white);
+    border-color: var(--primary-blue-dark);
+    /* Ombre légèrement plus prononcée au survol */
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.2);
+}
+
+/* --- CARTE DE DONNÉES DE BASE --- */
+.data-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    min-width: 0;
+}
+
+/* --- EXPÉDITION ACTIVE (Mise en relief) --- */
+.active-delivery-card {
+    border-top: 4px solid var(--primary-blue);
+    box-shadow: var(--shadow-elevated);
+}
+
+.header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Point clignotant Temps réel */
+.pulse-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: var(--danger-color);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(231, 76, 60, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+    }
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.badge-transit {
+    background-color: #fff3e0;
+    color: var(--warning-color);
+}
+
+/* --- PROGRESSION TIMELINE (Tracker) --- */
+.tracker-timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin: 40px 0;
+    padding: 0 20px;
+}
+
+/* Ligne grise en arrière-plan */
+.tracker-timeline::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 40px;
+    right: 40px;
+    height: 4px;
+    background-color: #f1f5f9;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 150px;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    color: var(--light-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    border: 3px solid var(--white);
+}
+
+.step-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    color: var(--light-text);
+}
+
+.step-time {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    margin-top: 2px;
+}
+
+/* États de progression */
+.step.completed .step-icon {
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+}
+
+.step.completed .step-label {
+    color: var(--dark-text);
+}
+
+.step.active .step-icon {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    box-shadow: 0 0 0 5px rgba(30, 136, 229, 0.2);
+}
+
+.step.active .step-label {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+/* --- GRILLE DE MÉTRIQUES PHYSIQUES --- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 25px;
+}
+
+.metric-box {
+    background-color: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.metric-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--light-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.metric-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.metric-value.temp-ok {
+    color: var(--primary-green);
+}
+
+.metric-sub {
+    font-size: 0.72rem;
+    color: var(--light-text);
+}
+
+/* --- HISTORIQUE & FILTRES --- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border-color);
+    background-color: var(--bg-light);
+    font-size: 0.85rem;
+    outline: none;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-blue);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.15);
+}
+
+/* --- TABLEAU RESPONSIVE --- */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 800px;
+}
+
+th {
+    padding: 16px 15px;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--light-text);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+td {
+    padding: 18px 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.text-blue {
+    color: var(--primary-blue);
+    margin-right: 6px;
+}
+
+/* Scellés de sécurité */
+.seal-badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.seal-badge.verified {
+    background-color: #efebe9;
+    color: #5d4037;
+    border: 1px solid #d7ccc8;
+}
+
+.seal-badge i {
+    margin-right: 4px;
+}
+
+/* Statuts de livraison */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.success {
+    background-color: var(--light-green);
+    color: var(--primary-green);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1100px) {
+    .tracker-timeline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+        padding-left: 30px;
+        margin: 30px 0;
+    }
+    .tracker-timeline::before {
+        top: 0;
+        bottom: 0;
+        left: 23px;
+        width: 4px;
+        height: auto;
+    }
+    .step {
+        flex-direction: row;
+        text-align: left;
+        width: 100%;
+        gap: 15px;
+    }
+    .step-label {
+        margin-top: 0;
+    }
+    .metrics-grid {
+        grid-template-columns: 1fr; /* Passage sur une colonne */
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+}

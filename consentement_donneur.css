@@ -1,0 +1,289 @@
+/* ==========================================================================
+   Variables Globales & Thème
+   ========================================================================== */
+:root {
+    --primary-color: #0f6fcf;
+    --primary-hover: #0b58a8;
+    --primary-gradient: linear-gradient(135deg, #0f6fcf 0%, #1769c3 100%);
+    --bg-gradient: linear-gradient(135deg, #f5f9ff 0%, #eef4ff 100%);
+    
+    --text-main: #17324d;
+    --text-muted: #5b6b7a;
+    --text-dark: #29435c;
+    
+    --bg-card: #ffffff;
+    --bg-box: #f8fbff;
+    --bg-info: #eef6ff;
+    --bg-alert: #fff5f5;
+    
+    --border-color: #dbe7ff;
+    --border-box: #dce8f8;
+    --border-alert: #f7c6b7;
+    
+    --shadow-main: 0 16px 45px rgba(10, 42, 90, 0.12);
+    --shadow-hover: 0 8px 20px rgba(15, 111, 207, 0.25);
+    
+    --radius-card: 20px;
+    --radius-box: 12px;
+    --radius-btn: 10px;
+    
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Conteneur Principal (Carte)
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: 860px;
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-main);
+    padding: 36px;
+    border: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   En-tête & Messages
+   ========================================================================== */
+.header {
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f4c81;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.info-box {
+    background: var(--bg-info);
+    border-left: 4px solid var(--primary-color);
+    border-radius: var(--radius-box);
+    padding: 16px 18px;
+    color: #274b61;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+}
+
+.message {
+    padding: 14px 18px;
+    border-radius: var(--radius-btn);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.message.error {
+    background: var(--bg-alert);
+    color: #b42318;
+    border: 1px solid var(--border-alert);
+}
+
+/* ==========================================================================
+   Sections du Formulaire
+   ========================================================================== */
+.form-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    margin: 0 0 14px 0;
+    color: #0f4c81;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   Grille des Organes
+   ========================================================================== */
+.organs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.organ-option {
+    background: var(--bg-box);
+    border: 1px solid var(--border-box);
+    border-radius: var(--radius-box);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.organ-option:hover {
+    border-color: var(--primary-color);
+    background: #f0f7ff;
+}
+
+.organ-option input[type="checkbox"] {
+    margin: 0;
+    accent-color: var(--primary-color);
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.organ-option label {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-dark);
+    user-select: none;
+    width: 100%;
+}
+
+/* ==========================================================================
+   Groupes de Consentements (Cases obligatoires)
+   ========================================================================== */
+.checkbox-group {
+    background: var(--bg-box);
+    border: 1px solid var(--border-box);
+    border-radius: var(--radius-box);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.checkbox-group:hover {
+    border-color: var(--primary-color);
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-top: 4px;
+    accent-color: var(--primary-color);
+    transform: scale(1.2);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox-label {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+    user-select: none;
+}
+
+/* ==========================================================================
+   Boutons & Actions
+   ========================================================================== */
+.form-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
+
+.btn-submit {
+    border: none;
+    background: var(--primary-gradient);
+    color: #fff;
+    padding: 13px 22px;
+    border-radius: var(--radius-btn);
+    font-weight: 600;
+    font-size: 0.98rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(15, 111, 207, 0.15);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-cancel {
+    border: 1px solid #cbd5e1;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 13px 22px;
+    border-radius: var(--radius-btn);
+    font-weight: 600;
+    font-size: 0.98rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancel:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+/* ==========================================================================
+   Responsive (Mobiles)
+   ========================================================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 16px 12px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .header h1 {
+        font-size: 1.45rem;
+    }
+
+    .organs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-submit, .btn-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+}

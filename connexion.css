@@ -1,0 +1,254 @@
+/* --- VARIABLES DE COULEURS --- */
+:root {
+    --primary-blue: #1e88e5;       /* Bleu médical / Confiance */
+    --primary-green: #2e7d32;      /* Vert espoir / Éthique / Vie */
+    --light-green: #e8f5e9;        /* Vert très clair pour les fonds */
+    --bg-light: #f5f7fa;           /* Fond de page blanc clinique */
+    --dark-text: #2c3e50;          /* Texte principal */
+    --border-color: #dcdde1;       /* Bordures des inputs */
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(30, 136, 229, 0.1);
+}
+
+/* --- STYLES GENERAUX --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* --- CONTENEUR PRINCIPAL --- */
+.login-container {
+    background-color: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 480px;
+    padding: 40px 30px;
+    border-top: 5px solid var(--primary-blue);
+    position: relative;
+}
+
+/* --- EN-TETE --- */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-icon {
+    font-size: 3rem;
+    color: var(--primary-green);
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.header h1 {
+    color: var(--dark-text);
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.header p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* --- SELECTEUR DE RÔLE --- */
+.role-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.role-option {
+    position: relative;
+}
+
+/* On cache l'input radio par défaut */
+.role-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Style visuel de la boîte du rôle */
+.role-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-light);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 12px 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.role-box i {
+    font-size: 1.3rem;
+    color: #7f8c8d;
+    margin-bottom: 6px;
+    transition: color 0.3s ease;
+}
+
+.role-box span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #7f8c8d;
+}
+
+/* Effet au survol */
+.role-box:hover {
+    background-color: #ebf3f9;
+}
+
+/* Style du rôle sélectionné */
+.role-option input[type="radio"]:checked + .role-box {
+    background-color: var(--light-green);
+    border-color: var(--primary-green);
+}
+
+.role-option input[type="radio"]:checked + .role-box i {
+    color: var(--primary-green);
+}
+
+.role-option input[type="radio"]:checked + .role-box span {
+    color: var(--primary-green);
+    font-weight: 600;
+}
+
+/* --- FORMULAIRE ET INPUTS --- */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--dark-text);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #95a5a6;
+    font-size: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+    background-color: var(--white);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.15);
+}
+
+/* --- MOT DE PASSE OUBLIÉ & LIENS --- */
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.85rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #7f8c8d;
+    cursor: pointer;
+}
+
+.remember-me input {
+    accent-color: var(--primary-blue);
+}
+
+.forgot-password {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: var(--primary-green);
+    text-decoration: underline;
+}
+
+/* --- BOUTON DE CONNEXION --- */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-green);
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* --- PIED DE PAGE --- */
+.footer-text {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.footer-text a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+}

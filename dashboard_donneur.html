@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Donneur - BioÉthique CM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard_donneur.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>BioÉthique CM</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_donneur.php" class="menu-item active">
+                <i class="fa-solid fa-chart-line"></i> Vue d'ensemble
+            </a>
+            <a href="carte_modif.php" class="menu-item">
+                <i class="fa-solid fa-id-card"></i> Modifier ma Carte
+            </a>
+            <a href="consentements.php" class="menu-item">
+                <i class="fa-solid fa-file-shield"></i> Mes Consentements
+            </a>
+            <a href="personnes-confiance.php" class="menu-item">
+                <i class="fa-solid fa-user-shield"></i> Personnes de Confiance
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Donneur Enregistré</p>
+                <p class="user-mail"><?= htmlspecialchars($user['email'] ?? ($_SESSION['user_email'] ?? 'donneur@bioethique.cm')) ?></p>
+            </div>
+            <a href="connexion.php" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        
+        <!-- Alerte de succès facultative si redirection depuis carte_modif -->
+        <?php if (isset($_GET['updated']) && $_GET['updated'] == '1'): ?>
+            <div class="alert alert-success" style="padding: 12px 20px; background-color: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px; font-weight: 500;">
+                <i class="fa-solid fa-circle-check"></i> Votre carte de donneur a été mise à jour avec succès !
+            </div>
+        <?php endif; ?>
+
+        <header class="main-header">
+            <div>
+                <h1>Ravi de vous revoir, <?= htmlspecialchars($user['prenom'] ?? '') ?></h1>
+                <p class="subtitle">Votre statut de donneur est actif et sécurisé sur le réseau national.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" onclick="window.print();">
+                    <i class="fa-solid fa-download"></i> Télécharger PDF
+                </button>
+                <button class="btn-primary" onclick="alert('Lien de partage généré !');">
+                    <i class="fa-solid fa-share-nodes"></i> Partager
+                </button>
+            </div>
+        </header>
+
+        <!-- Cartes de statistiques (KPIs) -->
+        <div class="stats-grid">
+            <!-- 1. Statut Juridique -->
+            <div class="stat-card">
+                <div class="stat-icon icon-blue">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="stat-data">
+                    <span class="stat-value"><?= htmlspecialchars($user['statut_juridique'] ?? 'Valide') ?></span>
+                    <span class="stat-label">Statut Juridique</span>
+                </div>
+            </div>
+
+            <!-- 2. Organes Consentis -->
+            <div class="stat-card">
+                <div class="stat-icon icon-green">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <div class="stat-data">
+                    <span class="stat-value"><?= htmlspecialchars($organesCount ?? '00') ?></span>
+                    <span class="stat-label">Organes Consentis</span>
+                </div>
+            </div>
+
+            <!-- 3. Proche Prévenu -->
+            <div class="stat-card">
+                <div class="stat-icon icon-purple">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div class="stat-data">
+                    <span class="stat-value"><?= htmlspecialchars($trustedCount ?? '00') ?></span>
+                    <span class="stat-label">Proche Prévenu</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Convocations & Rendez-vous Médicaux Reçus par le Donneur -->
+        <?php if (!empty($convocations)): ?>
+            <div class="data-card" style="border-left: 5px solid #17a2b8; background-color: #f4fbfd; margin-bottom: 25px;">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-paper-plane" style="color: #17a2b8;"></i> Convocations & Rendez-vous Médicaux Reçus</h2>
+                    <span class="priority-badge info" style="background-color: #17a2b8; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;"><?= count($convocations) ?> convocation(s)</span>
+                </div>
+                <div class="table-container">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e0e0e0; text-align: left;">
+                                <th style="padding: 10px;">Code Dossier</th>
+                                <th style="padding: 10px;">Organe Concerné</th>
+                                <th style="padding: 10px;">Date & Heure du RDV</th>
+                                <th style="padding: 10px;">Centre d'Analyses Assigné</th>
+                                <th style="padding: 10px;">Canal</th>
+                                <th style="padding: 10px;">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($convocations as $conv): ?>
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding: 12px 10px;"><strong>#<?= htmlspecialchars($conv['code_dossier']) ?></strong></td>
+                                    <td style="padding: 12px 10px;"><?= htmlspecialchars($conv['type_organe']) ?></td>
+                                    <td style="padding: 12px 10px; color: #1e88e5; font-weight: 600;"><i class="fa-solid fa-calendar-day"></i> <?= date('d/m/Y à H:i', strtotime($conv['date_rdv'])) ?></td>
+                                    <td style="padding: 12px 10px;"><?= htmlspecialchars($conv['centre_analyse']) ?></td>
+                                    <td style="padding: 12px 10px;"><span class="badge-security"><?= strtoupper(htmlspecialchars($conv['canal'])) ?></span></td>
+                                    <td style="padding: 12px 10px;"><span class="badge-status success"><i class="fa-solid fa-clock"></i> <?= htmlspecialchars($conv['statut_rdv'] ?? 'Programmé') ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Section 2 Colonnes -->
+        <div class="grid-two-columns">
+            
+            <!-- Carte Numérique -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-address-card"></i> Votre Carte Numérique</h2>
+                    <span class="priority-badge success">Officielle</span>
+                </div>
+                
+                <div class="card-display-wrapper">
+                    <div class="donor-digital-card">
+                        <div class="card-top-bar">
+                            <span class="country-name"><i class="fa-solid fa-heart-pulse"></i> BIOÉTHIQUE CAMEROUN</span>
+                            <span class="card-title-tag">CARTE DE DONNEUR</span>
+                        </div>
+
+                        <div class="card-middle-row">
+                            <div class="card-chip"></div>
+                            <i class="fa-solid fa-shield-heart emergency-icon"></i>
+                        </div>
+
+                        <div class="card-body-details">
+                            <div class="card-meta">
+                                <span class="card-label">Titulaire</span>
+                                <span class="card-value"><?= strtoupper(htmlspecialchars($nomComplet ?? '')) ?></span>
+                            </div>
+                            
+                            <div class="card-meta-row">
+                                <div class="card-meta">
+                                    <span class="card-label">Né(e) en</span>
+                                    <span class="card-value"><?= htmlspecialchars($user['annee_naissance'] ?? '-') ?></span>
+                                </div>
+                                <div class="card-meta">
+                                    <span class="card-label">Groupe Sanguin</span>
+                                    <span class="card-value"><?= htmlspecialchars($user['groupe_sanguin'] ?? '-') ?></span>
+                                </div>
+                            </div>
+
+                            <div class="card-meta">
+                                <span class="card-label">Organes consentis</span>
+                                <span class="card-value txt-small"><?= htmlspecialchars($organesTxt ?? 'Aucun') ?></span>
+                            </div>
+
+                            <div class="card-meta">
+                                <span class="card-label">Urgence (Contact)</span>
+                                <span class="card-value txt-small">
+                                    <?= htmlspecialchars($trustedPerson['nom_complet'] ?? 'Non renseigné') ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-watermark">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directives & Proches -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-user-shield"></i> Information & Consentement</h2>
+                </div>
+                
+                <div class="info-content-stack">
+                    <div class="info-box-status">
+                        <i class="fa-solid fa-scale-balanced icon-status"></i>
+                        <div>
+                            <h4>Loi sur le consentement présumé</h4>
+                            <p>Votre carte fait foi de preuve directe. Elle évite tout doute ou conflit familial au sein du corps médical lors d'une urgence critique.</p>
+                        </div>
+                    </div>
+
+                    <?php if (!empty($trustedPerson) && $trustedPerson['nom_complet'] !== 'Non renseigné'): ?>
+                    <div class="trusted-person-box">
+                        <div class="trusted-header">
+                            <h5>Personne de confiance désignée</h5>
+                            <span class="badge-relationship"><?= htmlspecialchars($trustedPerson['relation'] ?? 'Contact') ?></span>
+                        </div>
+                        <p class="trusted-name"><?= htmlspecialchars($trustedPerson['nom_complet']) ?></p>
+                        <p class="trusted-tel"><i class="fa-solid fa-phone"></i> <?= htmlspecialchars($trustedPerson['telephone'] ?? 'N/A') ?></p>
+                        <p class="trusted-note">
+                            <?php if (!empty($trustedPerson['date_notification'])): ?>
+                                Notifié(e) par e-mail le <?= date('d/m/Y', strtotime($trustedPerson['date_notification'])) ?>.
+                            <?php else: ?>
+                                En attente de notification.
+                            <?php endif; ?>
+                        </p>
+                    </div>
+                    <?php else: ?>
+                    <div class="trusted-person-box">
+                        <p class="trusted-note">Aucune personne de confiance enregistrée.</p>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tableau d'activité -->
+        <div class="data-card table-card">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-clock-rotate-left"></i> Journal d'activité</h2>
+                <span class="badge-security"><i class="fa-solid fa-lock"></i> Chiffré</span>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date / Heure</th>
+                            <th>Action</th>
+                            <th>IP / Localisation</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($logs)): ?>
+                            <?php foreach ($logs as $log): ?>
+                                <tr>
+                                    <td><strong><?= date('d/m/Y à H:i', strtotime($log['date_action'])) ?></strong></td>
+                                    <td><?= htmlspecialchars($log['action']) ?></td>
+                                    <td><?= htmlspecialchars($log['ip_adresse']) ?> (<?= htmlspecialchars($log['localisation']) ?>)</td>
+                                    <td><span class="badge-status success"><?= htmlspecialchars($log['statut']) ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="4" style="text-align: center;">Aucune activité récente.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="navigation.js"></script>
+</body>
+</html>

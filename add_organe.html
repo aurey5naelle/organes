@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enregistrer un Donneur & Consentement - BioÉthique CM</title>
+    <!-- Chargement de la police d'écriture moderne Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Librairie FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Feuille de style -->
+    <link rel="stylesheet" href="add_organe.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale de navigation (Sidebar) -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>BioÉthique CM</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_organe.html" class="menu-item">
+                <i class="fa-solid fa-chart-line"></i> Vue d'ensemble
+            </a>
+            <a href="add_organe.html" class="menu-item active">
+                <i class="fa-solid fa-dna"></i> Enregistrer un Organe
+            </a>
+            <a href="assigner_organe.html" class="menu-item">
+                <i class="fa-solid fa-handshake"></i> Assigner Organe
+            </a>
+            <a href="partenaire.php" class="menu-item">
+                <i class="fa-solid fa-hospital"></i> Hôpitaux Partenaires
+            </a>
+            <a href="ethique.php" class="menu-item">
+                <i class="fa-solid fa-scale-balanced"></i> Suivi Éthique
+            </a>
+            <a href="historique.php" class="menu-item">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historique / Traçabilité
+            </a>
+            <a href="consentements_organe.php" class="menu-item">
+                <i class="fa-solid fa-file-signature"></i> Consentements Donneurs
+            </a>
+            
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Organe National</p>
+                <p class="user-name" id="user-name-display">ethique.national@sante.gov</p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone de contenu principal -->
+    <main class="main-content">
+        
+        <!-- En-tête -->
+        <header class="main-header">
+            <div>
+                <h1>Déclaration de Donneur & Consentement</h1>
+                <p class="subtitle">Enregistrement de la volonté du donneur, planification des examens et lancement du protocole.</p>
+            </div>
+            <div class="header-actions">
+                <a href="dashboard_organe.html" class="btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Retour au tableau de bord
+                </a>
+            </div>
+        </header>
+
+        <!-- Message informatif sur le workflow -->
+        <div class="workflow-info-card">
+            <i class="fa-solid fa-circle-info"></i>
+            <p><strong>Remarque :</strong> Une fois le consentement validé, le statut du dossier passe immédiatement à <span class="status-pill warning">En cours</span>. Une convocation pour les analyses cliniques sera transmise au donneur. C'est après la validation de ces examens que l'organe passera à <span class="status-pill success">Validé</span> puis sera <span class="status-pill info">Matché</span> automatiquement avec la liste d'attente.</p>
+        </div>
+
+        <!-- FORMULAIRE DE DÉCLARATION -->
+        <div class="form-container">
+            <!-- ⚠️ CORRECTION : Redirection vers le fichier PHP de traitement -->
+            <form action="add_organe.php" method="POST" class="organ-form">
+                
+                <!-- SECTION 1 : Identité du Donneur & Organe proposé -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-user-check"></i> 1. Identité du Donneur & Organe Concerné</h2>
+                    <div class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="donor-name">Nom et Prénom du Donneur *</label>
+                            <input type="text" id="donor-name" name="donor_name" placeholder="Ex: Jean Dupont" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="donor-contact">Téléphone / WhatsApp du Donneur *</label>
+                            <input type="tel" id="donor-contact" name="donor_contact" placeholder="Ex: +237 6XX XX XX XX" required>
+                            <small class="form-help">Utilisé pour l'envoi de la convocation au RDV d'analyses.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="organ-type">Organe désigné pour le don *</label>
+                            <select id="organ-type" name="organ_type" required>
+                                <option value="" disabled selected>Sélectionnez l'organe</option>
+                                <option value="rein">Rein (Don de vivant)</option>
+                                <option value="foie">Lobe de Foie (Don de vivant)</option>
+                                <option value="cornee">Cornée</option>
+                                <option value="moelle">Moelle Osseuse</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hospital-source">Hôpital / Centre de prise en charge *</label>
+                            <select id="hospital-source" name="hospital_source" required>
+                                <option value="" disabled selected>Sélectionnez l'hôpital</option>
+                                <option value="HGY">Hôpital Général de Yaoundé (HGY)</option>
+                                <option value="HCD">Hôpital Central de Douala (HCD)</option>
+                                <option value="CHUY">CHU de Yaoundé (CHUY)</option>
+                                <option value="HGD">Hôpital Général de Douala (HGD)</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SECTION 2 : Programmation du Rendez-vous d'Analyses -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-calendar-check"></i> 2. Convocation aux Analyses Cliniques</h2>
+                    <div class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="appointment-date">Date et Heure souhaitées du RDV d'analyses *</label>
+                            <input type="datetime-local" id="appointment-date" name="appointment_date" required>
+                            <small class="form-help">Le donneur recevra ses instructions d'examen pour cette date.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lab-centre">Laboratoire / Service Hématologique *</label>
+                            <input type="text" id="lab-centre" name="lab_centre" placeholder="Ex: Laboratoire Central de Virologie" required>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SECTION 3 : Données Physiques et Biologiques Préliminaires -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-vial"></i> 3. Informations Biologiques Préliminaires</h2>
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="blood-group">Groupe Sanguin déclaré *</label>
+                            <select id="blood-group" name="blood_group" required>
+                                <option value="" disabled selected>Sélectionnez le groupe</option>
+                                <option value="A+">A +</option>
+                                <option value="A-">A -</option>
+                                <option value="B+">B +</option>
+                                <option value="B-">B -</option>
+                                <option value="AB+">AB +</option>
+                                <option value="AB-">AB -</option>
+                                <option value="O+">O +</option>
+                                <option value="O-">O -</option>
+                            </select>
+                            <small class="form-help">Sera confirmé biologiquement lors du rdv.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="donor-age">Âge du donneur (années) *</label>
+                            <input type="number" id="donor-age" name="donor_age" min="18" max="75" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="donor-weight">Poids du donneur (kg) *</label>
+                            <input type="number" id="donor-weight" name="donor_weight" min="30" max="200" step="0.1" required>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SECTION 4 : Consentement Éthique et Juridique du Donneur -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-file-signature"></i> 4. Consentement Éclairé du Donneur</h2>
+                    
+                    <div class="consent-box">
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="consent-free" name="consent_free" required>
+                            <label for="consent-free"><strong>Libre volonté :</strong> Je confirme que le présent don est effectué de manière entièrement libre, éclairée et volontaire, sans aucune pression financière, morale ou physique.</label>
+                        </div>
+
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="consent-medical" name="consent_medical" required>
+                            <label for="consent-medical"><strong>Engagement aux examens :</strong> Le donneur s'engage à se présenter au rendez-vous d'analyses biologiques et médicales afin d'évaluer la faisabilité et la compatibilité du don.</label>
+                        </div>
+
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="consent-legal" name="consent_legal" required>
+                            <label for="consent-legal"><strong>Respect de la loi :</strong> Je certifie que cette démarche s'inscrit strictement dans le cadre de la législation éthique et sanitaire en vigueur au Cameroun.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons d'Action -->
+                <div class="form-actions">
+                    <button type="reset" class="btn-cancel">Annuler la saisie</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-paper-plane"></i> Valider le Consentement & Générer la Convocation
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+    <!-- SCRIPT JS NETTOYÉ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Affichage du nom d'utilisateur dynamique
+            const userNameDisplay = document.getElementById('user-name-display');
+            const userNameFromSession = localStorage.getItem('user_name');
+            if (userNameDisplay && userNameFromSession) {
+                userNameDisplay.textContent = userNameFromSession;
+            }
+        });
+    </script>
+
+    <script src="navigation.js"></script>
+</body>
+</html>

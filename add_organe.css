@@ -1,0 +1,462 @@
+/* --- VARIABLES ET THÈME CENTRALISÉ --- */
+:root {
+    --primary-blue: #1e88e5;       /* Bleu médical principal */
+    --primary-green: #2e7d32;      /* Vert d'éthique et d'espoir */
+    --light-green: #e8f5e9;        /* Fond de validation verte */
+    --bg-light: #f8fafc;           /* Fond général doux */
+    --white: #ffffff;
+    --dark-text: #0f172a;          /* Textes principaux sombres */
+    --light-text: #64748b;         /* Sous-titres et légendes */
+    --border-color: #e2e8f0;       /* Bordures discrètes */
+    --border-focus: #93c5fd;       /* Bordure active au focus */
+    --warning-color: #d97706;      /* Orange d'avertissement */
+    --warning-bg: #fffbebfb;
+    --danger-color: #ef4444;       /* Rouge d'erreur */
+    --info-bg: #eff6ff;            /* Bleu d'information */
+    --sidebar-width: 280px;
+}
+
+/* --- RÉINITIALISATION GÉNÉRALE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--dark-text);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- BARRE LATÉRALE DE NAVIGATION (SIDEBAR) --- */
+/* --- BARRE LATÉRALE DE NAVIGATION (SIDEBAR) --- */
+/* 1. Le conteneur principal reste fixe à 100% de la hauteur */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--white);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    overflow: hidden; /* Empêche toute la sidebar de bouger */
+}
+
+/* 2. Le logo en haut reste fixe */
+.sidebar-brand {
+    padding: 20px 24px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Ne se réduit jamais */
+}
+
+/* 3. C'EST ICI QUE SE FAIT LA BARRE DE DÉFILEMENT (seul le menu scroll) */
+.sidebar-menu {
+    padding: 15px 0;
+    flex: 1;                  /* Prend tout l'espace disponible entre le haut et le bas */
+    overflow-y: auto;         /* Affiche la barre de défilement quand le menu est long */
+    overflow-x: hidden;
+}
+
+/* 4. Personnalisation optionnelle pour avoir la barre fine comme sur l'image */
+.sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    border-radius: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 24px;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.menu-item i {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    width: 20px;
+    transition: color 0.2s ease;
+}
+
+.menu-item:hover {
+    background-color: var(--bg-light);
+    color: var(--primary-blue);
+}
+
+.menu-item:hover i {
+    color: var(--primary-blue);
+}
+
+.menu-item.active {
+    background-color: #eff6ff;
+    color: var(--primary-blue);
+    border-left: 4px solid var(--primary-blue);
+    font-weight: 600;
+}
+
+.menu-item.active i {
+    color: var(--primary-blue);
+}
+
+/* 5. Le pied de page (Déconnexion) reste fixe tout en bas */
+.sidebar-footer {
+    padding: 18px 24px;
+    border-top: 1px solid var(--border-color);
+    background-color: #fafbfc;
+    flex-shrink: 0;            /* Reste toujours bien visible en bas sans être écrasé */
+}
+
+
+.user-info {
+    margin-bottom: 15px;
+}
+
+.user-role {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--dark-text);
+}
+
+.user-mail {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    word-break: break-all;
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--danger-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.btn-logout:hover {
+    opacity: 0.8;
+}
+
+/* --- ZONE DU CONTENU PRINCIPAL --- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    padding: 40px;
+    min-height: 100vh;
+    max-width: calc(100vw - var(--sidebar-width));
+}
+
+/* --- EN-TÊTE --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.main-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+/* BOUTONS D'ACTION HEADER */
+.btn-secondary {
+    background-color: var(--primary-blue); /* Bleu clinique principal (#1e88e5) */
+    color: var(--white);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #1565c0; /* Bleu un peu plus foncé au survol */
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+}
+
+/* --- BANDEAU INFORMATIF SUR LE WORKFLOW --- */
+.workflow-info-card {
+    background-color: var(--info-bg);
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    color: #1e40af;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.workflow-info-card i {
+    font-size: 1.25rem;
+    margin-top: 2px;
+    color: var(--primary-blue);
+}
+
+/* --- BADGES / PILLS DE STATUT --- */
+.status-pill {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pill.warning {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.status-pill.success {
+    background-color: var(--light-green);
+    color: var(--primary-green);
+}
+
+.status-pill.info {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* --- CONTENEUR DE FORMULAIRE --- */
+.form-container {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 35px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
+}
+
+.form-section {
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    color: var(--primary-blue);
+}
+
+/* GRILLE DU FORMULAIRE ET ESPACEMENT */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 30px; /* Espacement horizontal et vertical fluide */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+/* CHAMPS DE SAISIE HARMONISÉS */
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group input[type="datetime-local"],
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    font-size: 0.92rem;
+    color: var(--dark-text);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-blue);
+    background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.12);
+}
+
+.form-help {
+    font-size: 0.78rem;
+    color: var(--light-text);
+    margin-top: 2px;
+}
+
+/* --- BOÎTE DE CONSENTEMENT ÉTHIQUE --- */
+.consent-box {
+    background-color: #fefce8;
+    border: 1px dashed #fde047;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Aère correctement les 3 cases à cocher */
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--primary-green);
+    cursor: pointer;
+}
+
+.form-checkbox label {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.form-checkbox label strong {
+    color: var(--dark-text);
+}
+
+/* --- BOUTONS D'ACTION FORMULAIRE --- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: var(--light-text);
+    border: 1px solid var(--border-color);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #f1f5f9;
+    color: var(--dark-text);
+}
+
+.btn-submit {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: none;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #1b5e20;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+}
+
+/* --- RESPONSIVITÉ --- */
+@media (max-width: 900px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+    
+    .btn-cancel, .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+        max-width: 100vw;
+        padding: 20px;
+    }
+}

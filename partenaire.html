@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hôpitaux Partenaires - BioÉthique CM</title>
+    <!-- Chargement de la police d'écriture moderne Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Librairie FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Liaison avec la feuille de style commune et unifiée -->
+    <link rel="stylesheet" href="partenaire.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale de navigation (Sidebar) -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>BioÉthique CM</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_organe.html" class="menu-item">
+                <i class="fa-solid fa-chart-line"></i> Vue d'ensemble
+            </a>
+            <a href="add_organe.html" class="menu-item">
+                <i class="fa-solid fa-dna"></i> Enregistrer un Organe
+            </a>
+            <a href="assigner_organe.html" class="menu-item">
+                <i class="fa-solid fa-handshake"></i> Assigner Organe
+            </a>
+            <a href="partenaire.html" class="menu-item active">
+                <i class="fa-solid fa-hospital"></i> Hôpitaux Partenaires
+            </a>
+            <a href="ethique.html" class="menu-item">
+                <i class="fa-solid fa-scale-balanced"></i> Suivi Éthique
+            </a>
+            <a href="historique.html" class="menu-item">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historique / Traçabilité
+            </a>
+            <a href="consentements_organe.php" class="menu-item">
+                <i class="fa-solid fa-file-signature"></i> Consentements Donneurs
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-gears"></i> Paramètres
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Organe National</p>
+                <p class="user-mail">ethique.national@sante.gov</p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone de contenu principal -->
+    <main class="main-content">
+        
+        <!-- En-tête -->
+        <header class="main-header">
+            <div>
+                <h1>Hôpitaux Partenaires</h1>
+                <p class="subtitle">Gestion et suivi des établissements de santé agréés pour le prélèvement et la transplantation au Cameroun</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary-action">
+                    <i class="fa-solid fa-plus"></i> Agréer un nouvel hôpital
+                </button>
+            </div>
+        </header>
+
+        <!-- Blocs Statistiques Partenaires -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-hospital"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>4</h3>
+                    <p>Centres Agréés</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-truck-medical"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>12</h3>
+                    <p>Prélèvements en 2026</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>100%</h3>
+                    <p>Conformité Éthique</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Liste des Hôpitaux -->
+        <div class="data-card" style="margin-bottom: 30px;">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-hospital-user"></i> Établissements sous Convention Nationale</h2>
+                <span class="badge badge-info">Filtre : Tous</span>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom de l'Établissement</th>
+                            <th>Ville</th>
+                            <th>Agréments</th>
+                            <th>Dernière Activité</th>
+                            <th>Statut</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong>Hôpital Général de Yaoundé (HGY)</strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--light-text);">ID: HOSP-YDE-01</span>
+                            </td>
+                            <td>Yaoundé</td>
+                            <td>
+                                <span class="time-limit safe" style="font-size: 0.7rem; padding: 2px 6px;">Prélèvement</span>
+                                <span class="time-limit safe" style="font-size: 0.7rem; padding: 2px 6px;">Transplantation</span>
+                            </td>
+                            <td>Il y a 2 jours</td>
+                            <td>
+                                <span class="status-pill success">Actif / Opérationnel</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-eye"></i> Détails</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Hôpital Général de Douala (HGD)</strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--light-text);">ID: HOSP-DLA-02</span>
+                            </td>
+                            <td>Douala</td>
+                            <td>
+                                <span class="time-limit safe" style="font-size: 0.7rem; padding: 2px 6px;">Prélèvement</span>
+                                <span class="time-limit safe" style="font-size: 0.7rem; padding: 2px 6px;">Transplantation</span>
+                            </td>
+                            <td>Il y a 1 semaine</td>
+                            <td>
+                                <span class="status-pill success">Actif / Opérationnel</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-eye"></i> Détails</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>CHU de Yaoundé (CHUY)</strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--light-text);">ID: HOSP-YDE-03</span>
+                            </td>
+                            <td>Yaoundé</td>
+                            <td>
+                                <span class="time-limit safe" style="font-size: 0.7rem; padding: 2px 6px;">Prélèvement</span>
+                            </td>
+                            <td>Il y a 3 semaines</td>
+                            <td>
+                                <span class="status-pill success">Actif / Opérationnel</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-eye"></i> Détails</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Hôpital Central de Douala (HCD)</strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--light-text);">ID: HOSP-DLA-04</span>
+                            </td>
+                            <td>Douala</td>
+                            <td>
+                                <span class="time-limit safe" style="font-size: 0.7rem; padding: 2px 6px;">Prélèvement</span>
+                            </td>
+                            <td>Aucune activité récente</td>
+                            <td>
+                                <span class="status-pill warning">En cours d'audit</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-eye"></i> Détails</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="navigation.js"></script>
+</body>
+</html>

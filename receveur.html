@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Receveurs en Attente - BioÉthique CM</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Liaison avec le CSS -->
+    <link rel="stylesheet" href="receveur.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale de navigation de l'HÔPITAL -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-square-h"></i>
+            <span>Hôpital Général (HGY)</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_hop.html" class="menu-item">
+                <i class="fa-solid fa-desktop"></i> Console Hôpital
+            </a>
+            <a href="prelevement.html" class="menu-item">
+                <i class="fa-solid fa-circle-plus"></i> Déclarer un Prélèvement
+            </a>
+            <a href="receveur.html" class="menu-item active">
+                <i class="fa-solid fa-hospital-user"></i> Nos Receveurs en Attente
+            </a>
+            <a href="expedition.html" class="menu-item">
+                <i class="fa-solid fa-truck-ramp-box"></i> Suivi de nos Expéditions
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Coordination Intra-Hospitalière</p>
+                <p class="user-name" id="hospital-name">coordination@hgy.cm</p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone principale -->
+    <main class="main-content">
+        
+        <!-- En-tête -->
+        <header class="main-header">
+            <div>
+                <h1>Nos Receveurs en Attente (HGY)</h1>
+                <p class="subtitle">Suivi clinique des patients de l'établissement inscrits sur la Liste Nationale d'Attente</p>
+            </div>
+            <div class="header-actions">
+                <button id="btn-toggle-form" class="btn-primary-action">
+                    <i class="fa-solid fa-user-plus"></i> Inscrire un receveur
+                </button>
+            </div>
+        </header>
+
+        <!-- Conteneur Vertical (Le formulaire s'affichera au-dessus du tableau) -->
+        <div class="vertical-stack">
+            
+            <!-- Formulaire caché par défaut (.hidden) placé AU-DESSUS -->
+            <div class="data-card form-card-top hidden" id="form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-folder-open"></i> Nouvelle proposition d'inscription</h2>
+                    <button type="button" id="btn-close-form" class="btn-close">
+                        <i class="fa-solid fa-xmark"></i> Fermer
+                    </button>
+                </div>
+                
+                <form action="#" class="hospital-form">
+                    <div class="form-grid-three">
+                        <div class="form-group">
+                            <label for="receveur-id">Code Anonymisé du Patient *</label>
+                            <input type="text" id="receveur-id" placeholder="Ex: REC-2026-Y45" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="groupe-sanguin">Groupe Sanguin *</label>
+                            <select id="groupe-sanguin" required>
+                                <option value="">Choisir...</option>
+                                <option value="A+">A +</option>
+                                <option value="A-">A -</option>
+                                <option value="B+">B +</option>
+                                <option value="B-">B -</option>
+                                <option value="AB+">AB +</option>
+                                <option value="AB-">AB -</option>
+                                <option value="O+">O +</option>
+                                <option value="O-">O -</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Âge *</label>
+                            <input type="number" id="age" min="0" max="110" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-three">
+                        <div class="form-group">
+                            <label for="organe-demande">Organe Recherché *</label>
+                            <select id="organe-demande" required>
+                                <option value="">Sélectionnez l'organe...</option>
+                                <option value="rein">Rein</option>
+                                <option value="cornee">Cornée</option>
+                                <option value="foie">Lobe Hépatique / Foie</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="score">Score d'urgence médicale *</label>
+                            <input type="number" id="score" min="0" max="100" placeholder="Score sur 100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="medecin">Médecin référent *</label>
+                            <input type="text" id="medecin" placeholder="Nom du médecin" required>
+                        </div>
+                    </div>
+
+                    <div class="form-footer-flex">
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="ethique-validation" required>
+                            <label for="ethique-validation">
+                                Le dossier médical a été validé en comité d'éthique de l'HGY.
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fa-solid fa-shield-halved"></i> Soumettre à l'Organe National
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Liste des patients (Tableau en dessous) -->
+            <div class="data-card" id="list-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-users-viewfinder"></i> Patients actuellement en attente</h2>
+                    <span class="badge badge-info">Mise à jour en direct</span>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code Patient</th>
+                                <th>Organe Requis</th>
+                                <th>Groupe Sanguin</th>
+                                <th>Score d'Urgence</th>
+                                <th>Date d'Inscription</th>
+                                <th>Statut de Priorité</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#REC-2026-X81</strong></td>
+                                <td><i class="fa-solid fa-heart-pulse text-blue"></i> Rein</td>
+                                <td><span class="blood-type">O +</span></td>
+                                <td><strong>82 / 100</strong> (MELD-like)</td>
+                                <td>12 Janv 2026</td>
+                                <td><span class="priority-badge danger">Urgence Absolue</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#REC-2026-L40</strong></td>
+                                <td><i class="fa-solid fa-heart-pulse text-blue"></i> Rein</td>
+                                <td><span class="blood-type">B -</span></td>
+                                <td><strong>45 / 100</strong></td>
+                                <td>08 Mars 2026</td>
+                                <td><span class="priority-badge warning">Prioritaire</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#REC-2026-C03</strong></td>
+                                <td><i class="fa-solid fa-eye text-blue"></i> Cornée</td>
+                                <td><span class="blood-type">A +</span></td>
+                                <td><strong>15 / 100</strong></td>
+                                <td>22 Juin 2026</td>
+                                <td><span class="priority-badge success">Standard</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Script JavaScript léger d'affichage -->
+    <script>
+        const btnToggle = document.getElementById('btn-toggle-form');
+        const btnClose = document.getElementById('btn-close-form');
+        const formCard = document.getElementById('form-card');
+
+        function toggleForm() {
+            formCard.classList.toggle('hidden');
+            if(!formCard.classList.contains('hidden')) {
+                // Défilement fluide vers le formulaire lorsqu'il s'ouvre
+                formCard.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        btnToggle.addEventListener('click', toggleForm);
+        btnClose.addEventListener('click', toggleForm);
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hospitalName = urlParams.get('name');
+            const hospitalNameDisplay = document.getElementById('hospital-name');
+
+            if (hospitalName && hospitalNameDisplay) {
+                hospitalNameDisplay.textContent = decodeURIComponent(hospitalName);
+                localStorage.setItem('hospital_name', decodeURIComponent(hospitalName));
+            }
+        });
+    </script>
+
+    <script src="navigation.js"></script>
+</body>
+</html>

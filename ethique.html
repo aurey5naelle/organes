@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi Éthique - BioÉthique CM</title>
+    
+    <!-- Polices & Icônes -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Feuille de style globale -->
+    <link rel="stylesheet" href="ethique.css">
+    
+    <style>
+        /* Styles spécifiques pour le flux d'états et d'actions */
+        .status-pill.en-cours { background-color: #fff3cd; color: #856404; }
+        .status-pill.valide { background-color: #d4edda; color: #155724; }
+        .status-pill.matche { background-color: #cce5ff; color: #004085; }
+        
+        .btn-action-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-right: 3px;
+            color: white;
+            transition: opacity 0.2s;
+        }
+        .btn-action-sm:hover { opacity: 0.85; }
+        .btn-convocate { background-color: #17a2b8; }
+        .btn-validate { background-color: #28a745; }
+        .btn-match { background-color: #007bff; }
+        
+        /* Modal pour la convocation */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; 
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center; 
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff; 
+            padding: 25px; 
+            border-radius: 8px; 
+            width: 450px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Navigation latérale -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>BioÉthique CM</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_organe.html" class="menu-item">
+                <i class="fa-solid fa-chart-line"></i> Vue d'ensemble
+            </a>
+            <a href="add_organe.html" class="menu-item">
+                <i class="fa-solid fa-dna"></i> Enregistrer un Donneur
+            </a>
+            <a href="assigner_organe.html" class="menu-item">
+                <i class="fa-solid fa-handshake"></i> Assigner Organe
+            </a>
+            <a href="partenaire.html" class="menu-item">
+                <i class="fa-solid fa-hospital"></i> Hôpitaux Partenaires
+            </a>
+            <a href="ethique.html" class="menu-item active">
+                <i class="fa-solid fa-scale-balanced"></i> Suivi Éthique
+            </a>
+            <a href="historique.html" class="menu-item">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historique / Traçabilité
+            </a>
+            <a href="consentements_organe.php" class="menu-item">
+                <i class="fa-solid fa-file-signature"></i> Consentements Donneurs
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-gears"></i> Paramètres
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Organe National</p>
+                <p class="user-mail">ethique.national@sante.gov</p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone Principale -->
+    <main class="main-content">
+        
+        <header class="main-header">
+            <div>
+                <h1>Suivi Éthique & Processus d'Appariement</h1>
+                <p class="subtitle">Gestion du consentement, convocation aux analyses et matching receveurs</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary-action" id="btn-audit">
+                    <i class="fa-solid fa-shield-halved"></i> Audit de conformité
+                </button>
+            </div>
+        </header>
+
+        <!-- Cartes Statistiques -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                </div>
+                <div class="stat-data">
+                    <h3 id="stat-encours">1</h3>
+                    <p>En cours (Analyses)</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-data">
+                    <h3 id="stat-valides">1</h3>
+                    <p>Validés (Prêts)</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-people-arrows"></i>
+                </div>
+                <div class="stat-data">
+                    <h3 id="stat-matches">2</h3>
+                    <p>Organes Matchés</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau des Dossiers -->
+        <div class="content-grid">
+            <div class="data-card" style="grid-column: span 2;">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-clipboard-list"></i> Pipeline d'Approbation et de Matching</h2>
+                    <span class="badge badge-info">Mise à jour en direct</span>
+                </div>
+
+                <div class="table-container">
+                    <table id="ethics-table">
+                        <thead>
+                            <tr>
+                                <th>ID Dossier</th>
+                                <th>Type d'Organe</th>
+                                <th>Donneur / Hôpital</th>
+                                <th>Consentement</th>
+                                <th>Statut Éthique</th>
+                                <th>Actions & Communication</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Étape 1 : En Cours -->
+                            <tr id="row-91">
+                                <td><strong>#TX-2026-91</strong></td>
+                                <td>Foie</td>
+                                <td>Donneur #D-402 (CHUY)</td>
+                                <td><span class="time-limit safe" style="font-size: 0.75rem;"><i class="fa-solid fa-file-signature"></i> Signé (Légal)</span></td>
+                                <td><span class="status-pill en-cours" id="status-91"><i class="fa-solid fa-spinner fa-spin"></i> En cours</span></td>
+                                <td>
+                                    <button class="btn-action-sm btn-convocate" onclick="ouvrirModalConvocation('TX-2026-91', 'Donneur #D-402')" title="Planifier RDV / SMS">
+                                        <i class="fa-solid fa-calendar-plus"></i> Convoquer
+                                    </button>
+                                    <button class="btn-action-sm btn-validate" onclick="validerAnalyses('TX-2026-91')" title="Valider les résultats d'analyses">
+                                        <i class="fa-solid fa-check-double"></i> Valider Analyses
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Étape 2 : Validé -->
+                            <tr id="row-92">
+                                <td><strong>#TX-2026-92</strong></td>
+                                <td>Rein</td>
+                                <td>Donneur #D-510 (HCD)</td>
+                                <td><span class="time-limit safe" style="font-size: 0.75rem;"><i class="fa-solid fa-file-signature"></i> Signé (Légal)</span></td>
+                                <td><span class="status-pill valide" id="status-92"><i class="fa-solid fa-circle-check"></i> Validé</span></td>
+                                <td>
+                                    <button class="btn-action-sm btn-match" onclick="lancerMatching('TX-2026-92', 'Rein')" id="btn-match-92">
+                                        <i class="fa-solid fa-network-wired"></i> Comparer Liste d'Attente
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Étape 3 : Matché -->
+                            <tr id="row-89">
+                                <td><strong>#TX-2026-89</strong></td>
+                                <td>Rein</td>
+                                <td>Donneur #D-388 (HGY)</td>
+                                <td><span class="time-limit safe" style="font-size: 0.75rem;"><i class="fa-solid fa-file-signature"></i> Signé (Légal)</span></td>
+                                <td><span class="status-pill matche"><i class="fa-solid fa-user-check"></i> Matché</span></td>
+                                <td>
+                                    <small style="color: #2e7d32; font-weight: 600;"><i class="fa-solid fa-link"></i> Assigné au Patient #P-104</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Convocation -->
+    <div id="modalConvocation" class="modal">
+        <div class="modal-content">
+            <h3><i class="fa-solid fa-paper-plane"></i> Convoquer le donneur pour analyses</h3>
+            <p style="font-size:0.85rem; color:#666; margin-bottom: 15px;" id="modal-subtitle">Dossier #TX-2026-91</p>
+            
+            <form id="form-convocation" onsubmit="envoyerConvocation(event)">
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600;">Canal de communication :</label>
+                    <select id="canal" style="width:100%; padding:8px; margin-top:4px;">
+                        <option value="sms">SMS Sécurisé</option>
+                        <option value="email">Email d'invitation</option>
+                        <option value="app">Notification Application Mobile</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600;">Date & Heure du Rendez-vous :</label>
+                    <input type="datetime-local" id="date-rdv" required style="width:95%; padding:8px; margin-top:4px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600;">Centre d'analyses assigné :</label>
+                    <input type="text" value="Laboratoire Central d'Analyses (CHUY)" style="width:95%; padding:8px; margin-top:4px;" readonly>
+                </div>
+                <div style="text-align: right; gap: 10px; display: flex; justify-content: flex-end;">
+                    <button type="button" onclick="fermerModal()" style="padding: 8px 15px; border:none; background:#ccc; border-radius:4px; cursor:pointer;">Annuler</button>
+                    <button type="submit" style="padding: 8px 15px; border:none; background:#17a2b8; color:white; border-radius:4px; cursor:pointer;">Envoyer Convocation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Interactif -->
+    <script>
+        let currentDossier = "";
+
+        // 1. Ouverture/Fermeture Modal Convocation
+        function ouvrirModalConvocation(idDossier, donneur) {
+            currentDossier = idDossier;
+            document.getElementById('modal-subtitle').textContent = "Envoi d'une convocation à " + donneur + " (" + idDossier + ")";
+            document.getElementById('modalConvocation').style.display = 'flex';
+        }
+
+        function fermerModal() {
+            document.getElementById('modalConvocation').style.display = 'none';
+        }
+
+        function envoyerConvocation(e) {
+            e.preventDefault();
+            const dateRDV = document.getElementById('date-rdv').value;
+            fermerModal();
+            alert("Notification envoyée avec succès au donneur !\nDate de RDV pour les analyses : " + dateRDV);
+        }
+
+        // 2. Passer de "En cours" à "Validé"
+        function validerAnalyses(idDossier) {
+            if(confirm("Confirmez-vous que les analyses médicales sont conformes pour faire passer le dossier " + idDossier + " au statut VALIDÉ ?")) {
+                const statusPill = document.getElementById('status-91');
+                statusPill.className = "status-pill valide";
+                statusPill.innerHTML = '<i class="fa-solid fa-circle-check"></i> Validé';
+
+                const parentTd = statusPill.closest('tr').children[5];
+                parentTd.innerHTML = `
+                    <button class="btn-action-sm btn-match" onclick="lancerMatching('${idDossier}', 'Foie')">
+                        <i class="fa-solid fa-network-wired"></i> Comparer Liste d'Attente
+                    </button>
+                `;
+
+                // Mise à jour des compteurs
+                document.getElementById('stat-encours').textContent = "0";
+                document.getElementById('stat-valides').textContent = parseInt(document.getElementById('stat-valides').textContent) + 1;
+            }
+        }
+
+        // 3. Passer de "Validé" à "Matché"
+        function lancerMatching(idDossier, typeOrgane) {
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Algorithme en cours...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert("COMPATIBILITÉ TROUVÉE !\n\nOrgane : " + typeOrgane + "\nReceveur compatible : Patient #P-309 (Compatibilité HLA 94%, Urgence Rang 1)");
+                
+                const tr = document.getElementById(idDossier === 'TX-2026-92' ? 'row-92' : 'row-91');
+                const statusPill = tr.querySelector('.status-pill');
+                statusPill.className = "status-pill matche";
+                statusPill.innerHTML = '<i class="fa-solid fa-user-check"></i> Matché';
+
+                tr.children[5].innerHTML = '<small style="color: #2e7d32; font-weight: 600;"><i class="fa-solid fa-link"></i> Assigné au Patient #P-309</small>';
+
+                // Mise à jour des compteurs
+                document.getElementById('stat-valides').textContent = parseInt(document.getElementById('stat-valides').textContent) - 1;
+                document.getElementById('stat-matches').textContent = parseInt(document.getElementById('stat-matches').textContent) + 1;
+            }, 1500);
+        }
+    </script>
+    <script src="navigation.js"></script>
+</body>
+</html>

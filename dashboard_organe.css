@@ -1,0 +1,547 @@
+/* --- IMPORTATION NATIVE FONT AWESOME --- */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+
+/* --- VARIABLES ET THÈME --- */
+:root {
+    --primary-blue: #1e88e5;       /* Bleu clinique principal */
+    --primary-green: #2e7d32;      /* Vert d'éthique et d'espoir */
+    --light-green: #e8f5e9;        /* Success color background */
+    --bg-light: #f4f6f9;           /* Fond clinique général */
+    --white: #ffffff;
+    --dark-text: #2c3e50;          /* Titres */
+    --light-text: #7f8c8d;         /* Sous-titres et légendes */
+    --border-color: #eaeef2;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --sidebar-width: 260px;        
+}
+
+/* --- RÉINITIALISATION GÉNÉRALE --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--dark-text);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* --- PRÉSERVATION ET FORCE DES ICÔNES FONT AWESOME --- */
+i, .fa-solid, .fas, .fa-regular, .far, .fa-brands, .fab {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+    font-style: normal;
+    display: inline-block;
+}
+
+.fa-solid, .fas {
+    font-weight: 900 !important;
+}
+
+.fa-regular, .far {
+    font-weight: 400 !important;
+}
+
+/* --- BARRE LATÉRALE DE NAVIGATION (SIDEBAR) --- */
+/* --- BARRE LATÉRALE CORRIGÉE --- */
+/* 1. Le conteneur principal reste fixe à 100% de la hauteur */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--white);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    overflow: hidden; /* Empêche toute la sidebar de bouger */
+}
+
+/* 2. Le logo en haut reste fixe */
+.sidebar-brand {
+    padding: 20px 24px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Ne se réduit jamais */
+}
+
+/* 3. C'EST ICI QUE SE FAIT LA BARRE DE DÉFILEMENT (seul le menu scroll) */
+.sidebar-menu {
+    padding: 15px 0;
+    flex: 1;                  /* Prend tout l'espace disponible entre le haut et le bas */
+    overflow-y: auto;         /* Affiche la barre de défilement quand le menu est long */
+    overflow-x: hidden;
+}
+
+/* 4. Personnalisation optionnelle pour avoir la barre fine comme sur l'image */
+/* 1. Le conteneur principal reste fixe à 100% de la hauteur */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--white);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    overflow: hidden; /* Empêche toute la sidebar de bouger */
+}
+
+/* 2. Le logo en haut reste fixe */
+.sidebar-brand {
+    padding: 20px 24px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Ne se réduit jamais */
+}
+
+/* 3. C'EST ICI QUE SE FAIT LA BARRE DE DÉFILEMENT (seul le menu scroll) */
+.sidebar-menu {
+    padding: 15px 0;
+    flex: 1;                  /* Prend tout l'espace disponible entre le haut et le bas */
+    overflow-y: auto;         /* Affiche la barre de défilement quand le menu est long */
+    overflow-x: hidden;
+}
+
+/* 4. Personnalisation optionnelle pour avoir la barre fine comme sur l'image */
+.sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    border-radius: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+/* 5. Le pied de page (Déconnexion) reste fixe tout en bas */
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 24px;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.menu-item i {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    width: 20px;
+    transition: color 0.3s ease;
+}
+
+.menu-item:hover {
+    background-color: var(--bg-light);
+    color: var(--primary-blue);
+}
+
+.menu-item:hover i {
+    color: var(--primary-blue);
+}
+
+.menu-item.active {
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+    border-left: 4px solid var(--primary-blue);
+    font-weight: 600;
+}
+
+.menu-item.active i {
+    color: var(--primary-blue);
+}
+
+/* 5. Le pied de page (Déconnexion) reste fixe tout en bas */
+.sidebar-footer {
+    padding: 18px 24px;
+    border-top: 1px solid var(--border-color);
+    background-color: #fafbfc;
+    flex-shrink: 0;            /* Reste toujours bien visible en bas sans être écrasé */
+}
+
+
+.user-info {
+    margin-bottom: 12px;
+}
+
+.user-role {
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.user-mail {
+    font-size: 0.78rem;
+    color: var(--light-text);
+    word-break: break-all;
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--danger-color);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.btn-logout:hover {
+    text-decoration: underline;
+}
+
+/* --- ZONE DU CONTENU PRINCIPAL --- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    max-width: calc(100% - var(--sidebar-width));
+    flex-grow: 1;
+    padding: 25px 30px;
+    min-height: 100vh;
+}
+
+/* --- EN-TÊTE --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.main-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.subtitle {
+    color: var(--light-text);
+    font-size: 0.88rem;
+    margin-top: 2px;
+}
+
+.btn-primary-action {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none; /* <--- ENLÈVE LE TRAIT SOUS LE BOUTON */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* S'assurer que le trait ne réapparaît pas au survol de la souris */
+.btn-primary-action:hover {
+    background-color: var(--primary-green);
+    text-decoration: none; /* <--- GARANTIT QU'IL N'Y A PAS DE TRAIT AU SURVOL */
+}
+
+/* --- ZONE DES STATISTIQUES (CARTES) --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    background-color: var(--light-green);
+    color: var(--primary-green);
+    flex-shrink: 0;
+}
+
+.stat-icon.blue {
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+}
+
+.stat-icon.warning {
+    background-color: #fff3e0;
+    color: var(--warning-color);
+}
+
+.stat-data h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-data p {
+    font-size: 0.82rem;
+    color: var(--light-text);
+}
+
+/* --- AGENCEMENT DU CONTENU PRINCIPAL --- */
+.content-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
+/* Grille pour afficher Activité et Traçabilité côte à côte en bas (50/50) */
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    width: 100%;
+}
+
+.data-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 22px 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color);
+    width: 100%;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-header h2 i {
+    color: var(--primary-blue);
+}
+
+/* Badges d'état */
+.badge {
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-info {
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+}
+
+/* --- DESIGN DES TABLEAUX --- */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    padding: 12px 15px;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--light-text);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+td {
+    padding: 14px 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.88rem;
+    white-space: nowrap;
+}
+
+.match-count {
+    color: var(--primary-green);
+    font-weight: 600;
+}
+
+/* Indicateur de viabilité (Temps) */
+.time-limit {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.time-limit.danger {
+    background-color: #fde8e8;
+    color: var(--danger-color);
+}
+
+.time-limit.warning {
+    background-color: #fff3e0;
+    color: var(--warning-color);
+}
+
+.time-limit.safe {
+    background-color: var(--light-green);
+    color: var(--primary-green);
+}
+
+/* Statuts (Pills) */
+.status-pill {
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-pill.warning {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.status-pill.success {
+    background-color: var(--light-green);
+    color: var(--primary-green);
+}
+
+/* --- HISTORIQUE DE NOTIFICATIONS (TIMELINE) --- */
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    padding-left: 5px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background-color: var(--border-color);
+}
+
+.timeline-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    position: relative;
+}
+
+.timeline-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #e3f2fd;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.timeline-badge.green {
+    background-color: var(--light-green);
+    color: var(--primary-green);
+}
+
+.timeline-badge.error {
+    background-color: #fee2e2;
+    color: var(--danger-color);
+}
+
+.timeline-content h4 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.timeline-content p {
+    font-size: 0.8rem;
+    color: var(--light-text);
+    margin-top: 2px;
+}
+
+.timeline-time {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    display: block;
+    margin-top: 3px;
+}
+
+/* --- RESPONSIVITÉ (ÉCRANS MOYENS ET MOBILES) --- */
+@media (max-width: 1024px) {
+    .bottom-grid {
+        grid-template-columns: 1fr; /* Bascule sur une seule colonne pour les écrans moyens */
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+    }
+}

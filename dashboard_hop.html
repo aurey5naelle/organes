@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Hôpital - BioÉthique CM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard_hop.css">
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-square-h" style="color: var(--primary-blue, #1e88e5);"></i>
+            <span id="sidebar-hospital-name"><?php echo htmlspecialchars($_SESSION['nom_hopital'] ?? 'Hôpital Général'); ?></span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_hop.php" class="menu-item active">
+                <i class="fa-solid fa-desktop"></i> Console Hôpital
+            </a>
+            <a href="prelevement.php" class="menu-item">
+                <i class="fa-solid fa-circle-plus"></i> Déclarer un Prélèvement
+            </a>
+            <a href="receveur.php" class="menu-item">
+                <i class="fa-solid fa-hospital-user"></i> Nos Receveurs en Attente
+            </a>
+            <a href="expedition.html" class="menu-item">
+                <i class="fa-solid fa-truck-ramp-box"></i> Suivi de nos Expéditions
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Coordination Intra-Hospitalière</p>
+                <p class="user-name" id="hospital-email"><?php echo htmlspecialchars($user_email ?? 'coordination@hgy.cm'); ?></p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone de contenu principal -->
+    <main class="main-content">
+        
+        <?php if (!empty($message_status)) echo $message_status; ?>
+
+        <header class="main-header">
+            <div>
+                <h1>Tableau de bord opérationnel</h1>
+                <p class="subtitle">Gestion des greffons et des équipes de garde de votre établissement</p>
+            </div>
+            <div class="header-actions">
+                <a href="prelevement.html" class="btn-primary-action">
+                    <i class="fa-solid fa-dna"></i> Déclarer un nouveau greffon
+                </a>
+            </div>
+        </header>
+
+        <!-- Section opérationnelle -->
+        <div class="content-grid">
+            
+            <!-- Tableau de gauche : Greffons -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-box-tissue"></i> Greffons prélevés localement</h2>
+                    <span class="badge badge-info">Historique récent</span>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Greffon</th>
+                                <th>Organe</th>
+                                <th>Heure de Clampage</th>
+                                <th>Statut de Validation</th>
+                                <th>Expédition / Destination</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($greffons)): ?>
+                                <?php foreach ($greffons as $g): ?>
+                                    <tr>
+                                        <td><strong><?php echo htmlspecialchars($g['code_greffon'] ?? '#'.$g['id']); ?></strong></td>
+                                        <td><?php echo htmlspecialchars($g['organe'] ?? ''); ?></td>
+                                        <td><?php echo htmlspecialchars(!empty($g['heure_clampage']) ? date('d M Y • H:i', strtotime($g['heure_clampage'])) : 'N/A'); ?></td>
+                                        <td><span class="status-pill success"><?php echo htmlspecialchars($g['statut_validation'] ?? 'En cours'); ?></span></td>
+                                        <td><span class="time-limit warning" style="font-size: 0.75rem;"><i class="fa-solid fa-truck"></i> <?php echo htmlspecialchars($g['expedition_destination'] ?? 'En attente'); ?></span></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 20px;">Aucun greffon enregistré actuellement.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Widget de droite : Configuration de la garde -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-user-gear"></i> Paramètres de garde d'urgence</h2>
+                </div>
+
+                <form method="POST" action="dashboard_hop.php" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="form-group">
+                        <label for="chirurgien-garde">Chirurgien d'astreinte</label>
+                        <input type="text" id="chirurgien-garde" name="chirurgien_garde" value="<?php echo htmlspecialchars($garde['chirurgien_garde'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coordinateur-contact">Téléphone Coordination Urgence</label>
+                        <input type="text" id="coordinateur-contact" name="coordinateur_contact" value="<?php echo htmlspecialchars($garde['coordinateur_contact'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="statut-dispo">Capacité d'accueil USI</label>
+                        <select id="statut-dispo" name="statut_dispo">
+                            <option value="disponible" <?php if (($garde['capacite_usi'] ?? '') === 'disponible') echo 'selected'; ?>>Disponible (Reçoit les urgences)</option>
+                            <option value="sature" <?php if (($garde['capacite_usi'] ?? '') === 'sature') echo 'selected'; ?>>Saturé (Lits d'USI complets)</option>
+                            <option value="restreint" <?php if (($garde['capacite_usi'] ?? '') === 'restreint') echo 'selected'; ?>>Urgences vitales uniquement</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 10px;">
+                        <button type="submit" name="update_garde" class="btn-submit" style="width: 100%; justify-content: center; background-color: #1e88e5; color: #fff; padding: 10px; border: none; border-radius: 6px; cursor: pointer;">
+                            <i class="fa-solid fa-rotate"></i> Mettre à jour la garde
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hospitalNameFromUrl = urlParams.get('name');
+            const sidebarHospitalTitle = document.getElementById('sidebar-hospital-name');
+
+            if (hospitalNameFromUrl) {
+                const decodedName = decodeURIComponent(hospitalNameFromUrl);
+                localStorage.setItem('hospital_name', decodedName);
+            }
+
+            const savedHospitalName = localStorage.getItem('hospital_name');
+
+            if (savedHospitalName && sidebarHospitalTitle) {
+                sidebarHospitalTitle.textContent = savedHospitalName;
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déclarer un Prélèvement - BioÉthique CM</title>
+    <!-- Chargement de la police d'écriture moderne Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Librairie FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Liaison avec la feuille de style globale dédiée à l'Hôpital -->
+    <link rel="stylesheet" href="prelevement.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale de navigation de l'HÔPITAL -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-square-h"></i>
+            <span>Hôpital Général (HGY)</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_hop.html" class="menu-item">
+                <i class="fa-solid fa-desktop"></i> Console Hôpital
+            </a>
+            <a href="prelevement.html" class="menu-item active">
+                <i class="fa-solid fa-circle-plus"></i> Déclarer un Prélèvement
+            </a>
+            <a href="receveur.html" class="menu-item">
+                <i class="fa-solid fa-hospital-user"></i> Nos Receveurs en Attente
+            </a>
+            <a href="expedition.html" class="menu-item">
+                <i class="fa-solid fa-truck-ramp-box"></i> Suivi de nos Expéditions
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Coordination Intra-Hospitalière</p>
+                <p class="user-name" id="hospital-name">coordination@hgy.cm</p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone de contenu principal -->
+    <main class="main-content">
+        
+        <!-- En-tête -->
+        <header class="main-header">
+            <div>
+                <h1>Déclarer un nouveau prélèvement</h1>
+                <p class="subtitle">Enregistrement sécurisé d'un greffon disponible et validation du protocole éthique de prélèvement</p>
+            </div>
+            <div class="header-actions">
+                <a href="dashboard_hop.html" class="btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Retour à la console
+                </a>
+            </div>
+        </header>
+
+        <!-- Formulaire de déclaration -->
+        <div class="form-container">
+            <form action="#" method="POST">
+                
+                <!-- Section 1 : Informations du Donneur -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-user-injured"></i> 1. Identification clinique du donneur</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="donneur-id">Identifiant Anonymisé du Donneur *</label>
+                            <input type="text" id="donneur-id" placeholder="Ex: DN-2026-88Y" required>
+                            <span class="field-help">N'utilisez jamais le nom réel du patient pour préserver l'anonymat légal.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="groupe-sanguin">Groupe Sanguin & Rhésus *</label>
+                            <select id="groupe-sanguin" required>
+                                <option value="">Choisir le groupe...</option>
+                                <option value="A+">A +</option>
+                                <option value="A-">A -</option>
+                                <option value="B+">B +</option>
+                                <option value="B-">B -</option>
+                                <option value="AB+">AB +</option>
+                                <option value="AB-">AB -</option>
+                                <option value="O+">O +</option>
+                                <option value="O-">O -</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="age-donneur">Âge approximatif (ans) *</label>
+                            <input type="number" id="age-donneur" min="0" max="120" placeholder="Ex: 42" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cause-deces">Circonstance clinique / Cause du décès *</label>
+                            <select id="cause-deces" required>
+                                <option value="">Sélectionnez la cause...</option>
+                                <option value="ME">Mort Encéphalique (AVC, Traumatisme...)</option>
+                                <option value="Arret">Arrêt Cardiaque Persistant (Mastricht III)</option>
+                                <option value="Vivant">Donneur Vivant Apparenté (Rein/Lobe hépatique)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2 : Spécifications de l'Organe -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-dna"></i> 2. Spécifications techniques du greffon</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="type-organe">Type d'organe prélevé *</label>
+                            <select id="type-organe" required>
+                                <option value="">Sélectionnez l'organe...</option>
+                                <option value="rein-gauche">Rein Gauche</option>
+                                <option value="rein-droit">Rein Droit</option>
+                                <option value="cornee-gauche">Cornée Gauche</option>
+                                <option value="cornee-droite">Cornée Droite</option>
+                                <option value="foie">Lobe Hépatique / Foie entier</option>
+                                <option value="coeur">Cœur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="clampage-time">Heure exacte de clampage (Ischémie froide) *</label>
+                            <input type="datetime-local" id="clampage-time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hla-typage">Typage HLA (Si disponible)</label>
+                            <input type="text" id="hla-typage" placeholder="Ex: A2, B8, DR3, DR4">
+                        </div>
+                        <div class="form-group">
+                            <label for="solution-conservation">Solution de conservation utilisée *</label>
+                            <select id="solution-conservation" required>
+                                <option value="">Choisir la solution...</option>
+                                <option value="UW">University of Wisconsin (UW)</option>
+                                <option value="Celsior">Celsior</option>
+                                <option value="Custodiol">Custodiol (HTK)</option>
+                                <option value="Seringue-Physio">Sérum Physiologique stérile (Cornée)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3 : Vérifications d'Éthique et Consentement (Obligatoire) -->
+                <div class="form-section">
+                    <h2 class="section-title" style="color: var(--warning-color);"><i class="fa-solid fa-scale-balanced"></i> 3. Conformité bioéthique et légale</h2>
+                    
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="consent-check" required>
+                        <label for="consent-check">
+                            <strong>Vérification du consentement :</strong> Je certifie que le registre national des refus a été consulté, et/ou que le consentement explicite de la famille ou le consentement présumé du donneur décédé a été validé par l'équipe de coordination conformément aux lois bioéthiques camerounaises.
+                        </label>
+                    </div>
+
+                    <div class="form-checkbox" style="background-color: #e8f5e9; border-color: var(--primary-green);">
+                        <input type="checkbox" id="gratuit-check" required>
+                        <label for="gratuit-check" style="color: var(--primary-green);">
+                            <strong>Principe de non-commercialisation :</strong> Je confirme que ce prélèvement est effectué à titre strictement gracieux, sans aucune transaction financière, avantage en nature, ou compensation commerciale directe ou indirecte entre le donneur, sa famille et le receveur.
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Actions de validation -->
+                <div class="form-actions">
+                    <button type="reset" class="btn-cancel">Annuler la saisie</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-paper-plane"></i> Enregistrer et notifier l'Organe National
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hospitalName = urlParams.get('name');
+            const hospitalNameDisplay = document.getElementById('hospital-name');
+
+            if (hospitalName && hospitalNameDisplay) {
+                hospitalNameDisplay.textContent = decodeURIComponent(hospitalName);
+                localStorage.setItem('hospital_name', decodeURIComponent(hospitalName));
+            }
+        });
+    </script>
+
+    <script src="navigation.js"></script>
+</body>
+</html>

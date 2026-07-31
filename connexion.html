@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Plateforme de Don d'Organes</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="connexion.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Section en-tête -->
+        <div class="header">
+            <div class="logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <h1>Espace Connexion</h1>
+            <p>Plateforme nationale de don d'organes</p>
+        </div>
+
+        <!-- FORMULAIRE DE CONNEXION -->
+        <form action="connexion.php" method="POST">
+            
+            <!-- Sélecteur de profil -->
+            <div class="form-group">
+                <label>Choisissez votre profil d'utilisateur :</label>
+                <div class="role-selector">
+                    <label class="role-option">
+                        <input type="radio" name="user-role" value="ethic-board" checked required>
+                        <div class="role-box">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            <span>Organe Éthique</span>
+                        </div>
+                    </label>
+                    
+                    <label class="role-option">
+                        <input type="radio" name="user-role" value="hospital">
+                        <div class="role-box">
+                            <i class="fa-solid fa-hospital"></i>
+                            <span>Hôpital</span>
+                        </div>
+                    </label>
+                    
+                    <label class="role-option">
+                        <input type="radio" name="user-role" value="donor">
+                        <div class="role-box">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span>Donneur</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Champ Nom (Dynamique selon le rôle) -->
+            <div class="form-group" id="name-field-group">
+                <label for="user-name" id="name-label">Nom du Donneur</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user" id="name-icon"></i>
+                    <input type="text" id="user-name" name="user_name" class="form-control" placeholder="Jean Dupont" autocomplete="name" required>
+                </div>
+            </div>
+
+            <!-- Champ Identifiant / Email -->
+            <div class="form-group">
+                <label for="username">Identifiant ou Email</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="username" name="username" class="form-control" placeholder="exemple@sante.gouv" autocomplete="email" required>
+                </div>
+            </div>
+
+            <!-- Champ Mot de passe -->
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" autocomplete="current-password" required>
+                </div>
+            </div>
+
+            <!-- Options (Se souvenir / Oubli) -->
+            <div class="options-row">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember" value="on"> Se souvenir de moi
+                </label>
+                <a href="mot_de_passe_oublie.html" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
+
+            <!-- Bouton Valider -->
+            <button type="submit" class="btn-submit">
+                <span>Se connecter</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <div class="footer-text">
+            Nouveau sur la plateforme ? <a href="inscription.html">Créer un compte</a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('input[name="user-role"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const nameLabel = document.getElementById('name-label');
+                const nameInput = document.getElementById('user-name');
+                const nameIcon = document.getElementById('name-icon');
+
+                if (this.value === 'hospital') {
+                    nameLabel.textContent = 'Nom de l\'Hôpital';
+                    nameInput.placeholder = 'Hôpital Général de Yaoundé';
+                    nameIcon.classList.remove('fa-user');
+                    nameIcon.classList.add('fa-hospital');
+                } else if (this.value === 'donor') {
+                    nameLabel.textContent = 'Nom du Donneur';
+                    nameInput.placeholder = 'Jean Dupont';
+                    nameIcon.classList.remove('fa-hospital');
+                    nameIcon.classList.add('fa-user');
+                } else {
+                    nameLabel.textContent = 'Nom de l\'Organisme';
+                    nameInput.placeholder = 'Organe National d\'Éthique';
+                    nameIcon.classList.remove('fa-hospital');
+                    nameIcon.classList.add('fa-building');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

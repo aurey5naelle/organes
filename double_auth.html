@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Authentification - Plateforme de Don d'Organes</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Liaison avec le fichier CSS dédié -->
+    <link rel="stylesheet" href="double_auth.css">
+</head>
+<body>
+
+    <div class="auth-container">
+        <!-- Bouton retour à la page de connexion -->
+        <a href="connexion.html" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Retour
+        </a>
+
+        <!-- Section En-tête -->
+        <div class="header">
+            <div class="logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <h1>Vérification de sécurité</h1>
+            <p>Un code de validation a été envoyé à l'adresse e-mail associée à votre compte.</p>
+        </div>
+
+        <!-- Simulation d'affichage de l'email masqué pour la sécurité -->
+        <div class="email-badge">
+            <i class="fa-solid fa-envelope"></i>
+            <span>u*******@hopital-sante.gouv</span>
+        </div>
+
+        <!-- Formulaire de saisie du code envoyant vers double_auth.php -->
+        <form action="double_auth.php" method="POST">
+            <div class="form-group">
+                <label>Saisissez le code de validation à 6 chiffres</label>
+                
+                <!-- Zone de saisie du code à 6 chiffres séparés -->
+                <div class="code-inputs">
+                    <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" required class="code-field" autofocus>
+                    <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" required class="code-field">
+                    <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" required class="code-field">
+                    <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" required class="code-field">
+                    <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" required class="code-field">
+                    <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" required class="code-field">
+                </div>
+                
+                <!-- Champ caché pour stocker le code complet lors de la soumission -->
+                <input type="hidden" name="verification-code" id="full-code">
+            </div>
+
+            <!-- Bouton de validation -->
+            <button type="submit" class="btn-submit">
+                <span>Vérifier le code</span>
+                <i class="fa-solid fa-circle-check"></i>
+            </button>
+        </form>
+
+        <!-- Section de renvoi du code -->
+        <div class="resend-section">
+            <p>Vous n'avez pas reçu le code ?</p>
+            <button type="button" id="btn-resend" class="btn-resend" disabled>
+                Renvoyer le code (dans <span id="timer">59</span>s)
+            </button>
+        </div>
+    </div>
+
+    <!-- Script pour la gestion des inputs du code et du compte à rebours -->
+   <script>
+    const inputs = document.querySelectorAll('.code-field');
+    const fullCodeInput = document.getElementById('full-code');
+
+    // 1. Navigation automatique entre les cases
+    inputs.forEach((input, index) => {
+        input.addEventListener('keyup', (e) => {
+            const currentInput = input;
+            const nextInput = inputs[index + 1];
+            const prevInput = inputs[index - 1];
+
+            if (currentInput.value.length === 1 && nextInput) {
+                nextInput.focus();
+            }
+
+            if (e.key === "Backspace" && prevInput) {
+                prevInput.focus();
+            }
+
+            updateFullCode();
+        });
+
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasteData = e.clipboardData.getData('text').slice(0, 6);
+            if (/^\d+$/.test(pasteData)) {
+                inputs.forEach((inp, idx) => {
+                    inp.value = pasteData[idx] || '';
+                });
+                updateFullCode();
+                inputs[Math.min(pasteData.length, 5)].focus();
+            }
+        });
+    });
+
+    function updateFullCode() {
+        let code = "";
+        inputs.forEach(input => code += input.value);
+        if (fullCodeInput) fullCodeInput.value = code;
+    }
+
+    // 2. Compte à rebours
+    let timeLeft = 59;
+    const timerSpan = document.getElementById('timer');
+    const resendBtn = document.getElementById('btn-resend');
+
+    const countdown = setInterval(() => {
+        timeLeft--;
+        if (timerSpan) timerSpan.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            if (resendBtn) {
+                resendBtn.disabled = false;
+                resendBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Renvoyer un nouveau code';
+                resendBtn.classList.add('active');
+            }
+        }
+    }, 1000);
+
+    // 3. Redirection vers renvoyer_code.php SEULEMENT au clic sur le bouton
+    if (resendBtn) {
+        resendBtn.addEventListener('click', () => {
+            window.location.href = 'renvoyer_code.php';
+        });
+    }
+
+    // 4. RÉCUPÉRATION DU CODE DÈS LE PREMIER CHARGEMENT
+    // On extrait le code envoyé dans l'URL (?code=XXXXXX)
+    const urlParams = new URLSearchParams(window.location.search);
+    const realCode = urlParams.get('code');
+
+    if (realCode && realCode.length === 6) {
+        console.log("Code extrait de l'URL :", realCode);
+        
+        // Remplit automatiquement les 6 cases de saisie
+        const digits = realCode.split('');
+        inputs.forEach((input, index) => {
+            if (digits[index]) input.value = digits[index];
+        });
+        updateFullCode();
+    }
+</script>
+
+</body>
+</html>

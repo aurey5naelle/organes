@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignation d'Organes - BioÉthique CM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Feuilles de style externes -->
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="assigner_organe.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale de navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>BioÉthique CM</span>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="dashboard_organe.php" class="menu-item">
+                <i class="fa-solid fa-chart-line"></i> Vue d'ensemble
+            </a>
+            <a href="add_organe.html" class="menu-item">
+                <i class="fa-solid fa-dna"></i> Enregistrer un Organe
+            </a>
+            <a href="assigner_organe.html" class="menu-item active">
+                <i class="fa-solid fa-handshake"></i> Assigner un Organe
+            </a>
+            <a href="partenaire.php" class="menu-item">
+                <i class="fa-solid fa-hospital"></i> Hôpitaux Partenaires
+            </a>
+            <a href="ethique.php" class="menu-item">
+                <i class="fa-solid fa-scale-balanced"></i> Suivi Éthique
+            </a>
+            <a href="historique.html" class="menu-item">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historique / Traçabilité
+            </a>
+            <a href="consentements_organe.php" class="menu-item">
+                <i class="fa-solid fa-file-signature"></i> Consentements Donneurs
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Organe National</p>
+                <p class="user-name" id="user-name-display">ethique.national@sante.gov</p>
+            </div>
+            <a href="connexion.html" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Contenu Principal -->
+    <main class="main-content">
+        <header class="main-header">
+            <div>
+                <h1>Assignation d'Organes aux Patients</h1>
+                <p class="subtitle">Appariement des organes disponibles avec les patients en attente</p>
+            </div>
+            <div class="header-actions">
+                <a href="dashboard_organe.php" class="btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Retour au tableau de bord
+                </a>
+            </div>
+        </header>
+
+        <!-- Conteneur pour les notifications d'alerte -->
+        <div id="alert-container"></div>
+
+        <!-- Section 1 & 2 : Organes enregistrés et Patients receveurs -->
+        <div class="content-grid">
+            
+            <!-- Tableau 1 : Organes Disponibles -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-box-tissue"></i> Organes Disponibles (Éthique)</h2>
+                    <span class="badge badge-info">Temps réel</span>
+                </div>
+                <div class="table-container">
+                    <table id="organes-table">
+                        <thead>
+                            <tr>
+                                <th>Code Greffon</th>
+                                <th>Donneur</th>
+                                <th>Organe</th>
+                                <th>Groupe Sanguin</th>
+                                <th>Hôpital</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="organes-tbody">
+                            <tr class="loading">
+                                <td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i> Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tableau 2 : Receveurs / Patients en attente -->
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-users"></i> Liste des Receveurs</h2>
+                    <span class="badge badge-info">En attente</span>
+                </div>
+                <div class="table-container">
+                    <table id="patients-table">
+                        <thead>
+                            <tr>
+                                <th>Code Patient</th>
+                                <th>Nom du Patient</th>
+                                <th>Organe Requis</th>
+                                <th>Groupe Sanguin</th>
+                                <th>Urgence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patients-tbody">
+                            <tr class="loading">
+                                <td colspan="5"><i class="fa-solid fa-spinner fa-spin"></i> Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3 : Tableau d'Appariement / Compatibilité croisée -->
+        <div class="data-card" style="margin-top: 2rem;">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-check-double"></i> Compatibilités Détectées (Receveurs / Organes)</h2>
+                <span class="badge badge-success">Matchs Potentiels</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom du Receveur</th>
+                            <th>Organe Compatible</th>
+                            <th>Nom du Donneur</th>
+                            <th>Informations Organe</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matches-tbody">
+                        <tr class="loading">
+                            <td colspan="5"><i class="fa-solid fa-spinner fa-spin"></i> Analyse des compatibilités en cours...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modale de Confirmation d'Assignation -->
+    <div class="modal" id="assign-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Assigner un Organe au Patient</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="modal-info" id="organ-info"></div>
+
+            <h4>Sélectionner un patient :</h4>
+            <div class="patients-list" id="modal-patients"></div>
+
+            <div class="modal-actions">
+                <button class="btn-primary" id="confirm-assign-btn" onclick="confirmAssign()" disabled>
+                    <i class="fa-solid fa-check"></i> Assigner
+                </button>
+                <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript d'Appariement et Gestion des requêtes -->
+    <script>
+// Fonction d'assignation directe au clic sur "Assigner" dans le tableau de compatibilité
+function assignerDirectement(greffonId, patientId, nomPatient, organe) {
+    if (!confirm(`Confirmer le match de l'organe (${organe}) pour le patient ${nomPatient} ?`)) {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'assign_organ');
+    formData.append('greffon_id', greffonId);
+    formData.append('patient_id', patientId);
+
+    fetch('assigner_organe.php', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(response => {
+            if (response.success) {
+                showAlert(`Statut mis à jour : ${nomPatient} est maintenant Matché !`, 'success');
+                refreshAllData(); // Recharge les tableaux automatiquement
+            } else {
+                showAlert(`Erreur : ${response.message}`, 'error');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showAlert("Erreur lors de la mise à jour du statut.", "error");
+        });
+}
+
+// Analyse et affichage du tableau de compatibilité croisée
+function checkCompatibilities() {
+    const fdOrganes = new FormData();
+    fdOrganes.append('action', 'get_organes');
+
+    const fdPatients = new FormData();
+    fdPatients.append('action', 'get_patients');
+
+    Promise.all([
+        fetch('assigner_organe.php', { method: 'POST', body: fdOrganes }).then(r => r.json()),
+        fetch('assigner_organe.php', { method: 'POST', body: fdPatients }).then(r => r.json())
+    ]).then(([organes, patients]) => {
+        const matchesTbody = document.getElementById('matches-tbody');
+        matchesTbody.innerHTML = '';
+
+        if (!Array.isArray(organes) || !Array.isArray(patients)) {
+            matchesTbody.innerHTML = '<tr><td colspan="5" class="empty-state">Impossible d\'analyser les compatibilités.</td></tr>';
+            return;
+        }
+
+        let matchFound = false;
+
+        patients.forEach(patient => {
+            const patientId = patient.id || patient.id_patient;
+            const patientNom = patient.nom_patient || patient.nom || 'Patient Inconnu';
+            const organReq = (patient.type_organe_requis || patient.organe_requis || patient.type_organe || patient.organe || '').toString().trim().toLowerCase();
+            const bloodPatient = (patient.groupe_sanguin || '').trim();
+
+            organes.forEach(organe => {
+                const organAvailable = (organe.organe || '').toString().trim().toLowerCase();
+                const bloodDonor = (organe.groupe_sanguin || '').trim();
+
+                const sameOrgan = organReq !== '' && (organReq === organAvailable || organReq.includes(organAvailable) || organAvailable.includes(organReq));
+                const sameBlood = bloodPatient === bloodDonor;
+
+                if (sameOrgan && sameBlood) {
+                    matchFound = true;
+                    
+                    // Vérification du statut actuel (pour savoir si c'est déjà matché)
+                    const isMatched = (organe.statut_validation || organe.statut || '').toLowerCase().includes('match') || 
+                                      (patient.statut || '').toLowerCase().includes('match');
+
+                    // Gestion du bouton ou du badge
+                    let actionHtml = '';
+                    if (isMatched) {
+                        actionHtml = `<span class="badge badge-success" style="background:#e8f5e9; color:#2e7d32; padding: 6px 12px; border-radius:4px; font-weight:bold;">
+                                        <i class="fa-solid fa-check-double"></i> Matché
+                                     </span>`;
+                    } else {
+                        actionHtml = `<button class="action-btn" onclick="assignerDirectement(${organe.id}, ${patientId}, '${patientNom.replace(/'/g, "\\'")}', '${organe.organe}')">
+                                        <i class="fa-solid fa-link"></i> Assigner
+                                      </button>`;
+                    }
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${patientNom}</strong> (${patient.code_patient || 'PAT-' + patientId})</td>
+                        <td><span class="badge badge-info">${organe.organe}</span></td>
+                        <td>${organe.donor_name}</td>
+                        <td>Groupe ${organe.groupe_sanguin} • Hôpital: ${organe.hopital_source}</td>
+                        <td>${actionHtml}</td>
+                    `;
+                    matchesTbody.appendChild(row);
+                }
+            });
+        });
+
+        if (!matchFound) {
+            matchesTbody.innerHTML = '<tr><td colspan="5" class="empty-state">Aucune compatibilité directe trouvée.</td></tr>';
+        }
+    }).catch((err) => {
+        console.error("Erreur Compatibilités JS :", err);
+        const matchesTbody = document.getElementById('matches-tbody');
+        matchesTbody.innerHTML = '<tr><td colspan="5" class="empty-state">Erreur d\'analyse des compatibilités.</td></tr>';
+    });
+}
+function loadOrganes() {
+    const formData = new FormData();
+    formData.append('action', 'get_organes');
+
+    return fetch('assigner_organe.php', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(organes => {
+            const tbody = document.getElementById('organes-tbody');
+            tbody.innerHTML = '';
+            if (!Array.isArray(organes) || organes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Aucun organe disponible</td></tr>';
+                return;
+            }
+            organes.forEach(organe => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${organe.code_greffon}</strong></td>
+                    <td>${organe.donor_name}</td>
+                    <td>${organe.organe}</td>
+                    <td>${organe.groupe_sanguin}</td>
+                    <td>${organe.hopital_source}</td>
+                    <td><span class="badge">Disponible</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+}
+
+function loadPatients() {
+    const formData = new FormData();
+    formData.append('action', 'get_patients');
+
+    return fetch('assigner_organe.php', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(patients => {
+            const tbody = document.getElementById('patients-tbody');
+            tbody.innerHTML = '';
+            if (!Array.isArray(patients) || patients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Aucun patient en attente</td></tr>';
+                return;
+            }
+            patients.forEach(patient => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${patient.code_patient || 'PAT-' + patient.id}</strong></td>
+                    <td>${patient.nom_patient || patient.nom}</td>
+                    <td>${patient.type_organe_requis || patient.organe}</td>
+                    <td>${patient.groupe_sanguin}</td>
+                    <td><span class="status-badge status-attente">${patient.score_urgence || 0}/100</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+}
+
+function showAlert(message, type) {
+    const container = document.getElementById('alert-container');
+    if (!container) return;
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} show`;
+    alert.style.padding = "10px 15px";
+    alert.style.marginBottom = "10px";
+    alert.style.borderRadius = "5px";
+    alert.style.color = "#fff";
+    alert.style.backgroundColor = type === 'success' ? '#2e7d32' : '#d32f2f';
+    alert.innerHTML = `<strong>${type === 'success' ? 'Succès' : 'Erreur'} :</strong> ${message}`;
+    container.appendChild(alert);
+    setTimeout(() => alert.remove(), 4000);
+}
+
+function refreshAllData() {
+    loadOrganes();
+    loadPatients();
+    checkCompatibilities();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    refreshAllData();
+});
+</script>
+    <script src="navigation.js"></script>
+</body>
+</html>

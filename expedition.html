@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de nos Expéditions - BioÉthique CM</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Feuilles de style -->
+    <link rel="stylesheet" href="expedition.css">
+    <link rel="stylesheet" href="navigation.css">
+</head>
+<body>
+
+    <!-- Barre latérale de navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-hospital"></i>
+            <span id="user_name">Chargement...</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard_hop.php" class="menu-item">
+                <i class="fa-solid fa-desktop"></i> Console Hôpital
+            </a>
+            <a href="prelevement.php" class="menu-item">
+                <i class="fa-solid fa-circle-plus"></i> Déclarer un Prélèvement
+            </a>
+            <a href="receveur.php" class="menu-item">
+                <i class="fa-solid fa-hospital-user"></i> Nos Receveurs en Attente
+            </a>
+            <a href="expedition.html" class="menu-item active">
+                <i class="fa-solid fa-truck-ramp-box"></i> Suivi de nos Expéditions
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <p class="user-role">Coordination Intra-Hospitalière</p>
+                <p class="user_name" id="hospital-email">coordination@hgy.cm</p>
+            </div>
+            <a href="connexion.html" class="btn-logout" id="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- Zone principale -->
+    <main class="main-content">
+        
+        <header class="main-header">
+            <div>
+                <h1>Suivi logistique et Expéditions</h1>
+                <p class="subtitle">Contrôle de la traçabilité des greffons prélevés en cours d'acheminement</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-refresh" id="btn-refresh" onclick="chargerDonnees();">
+                    <i class="fa-solid fa-rotate" id="icon-refresh"></i> Actualiser les données
+                </button>
+            </div>
+        </header>
+
+        <!-- Section Tableau des Compatibilités -->
+        <section class="history-section">
+            <div class="data-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-dna"></i> Greffons Matchés (Assignations)</h2>
+                    <div class="filter-group">
+                        <input type="text" id="searchInput" onkeyup="filtrerTableau()" placeholder="Rechercher par patient, organe..." class="search-input">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="table-assignations">
+                        <thead>
+                            <tr>
+                                <th>Code Greffon</th>
+                                <th>Organe</th>
+                                <th>Donneur</th>
+                                <th>Groupe Sanguin</th>
+                                <th>Receveur Attribué</th>
+                                <th>Hôpital Destination</th>
+                                <th>Date d'Assignation</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-assignations">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 20px;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Chargement des expéditions...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initialiserUtilisateur();
+        chargerDonnees();
+    });
+
+    // Échappement HTML pour prévenir les failles XSS
+    function escapeHtml(text) {
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // 1. Récupération des infos utilisateur enregistrées dans le localStorage
+    function initialiserUtilisateur() {
+        let nomHopital = localStorage.getItem('user_name') || 
+                         localStorage.getItem('nom_hopital') || 
+                         localStorage.getItem('nom');
+
+        let emailHopital = localStorage.getItem('user_email') || 
+                          localStorage.getItem('email') || 
+                          localStorage.getItem('email_hopital');
+
+        if (!emailHopital || !nomHopital) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const val = localStorage.getItem(key);
+
+                try {
+                    const obj = JSON.parse(val);
+                    if (typeof obj === 'object' && obj !== null) {
+                        if (!nomHopital) {
+                            nomHopital = obj.nom_hopital || obj.nom_etablissement || obj.nom || obj.user_name || obj.username || obj.hospital_name || obj.etablissement;
+                        }
+                        if (!emailHopital) {
+                            emailHopital = obj.email || obj.user_email || obj.email_hopital || obj.mail;
+                        }
+                    }
+                } catch (e) {
+                    if (!nomHopital && ['nom_hopital', 'user_name', 'nom_etablissement', 'nom', 'username', 'hospital_name', 'etablissement'].includes(key.toLowerCase())) {
+                        nomHopital = val;
+                    }
+                    if (!emailHopital && ['email', 'user_email', 'email_hopital', 'mail'].includes(key.toLowerCase())) {
+                        emailHopital = val;
+                    }
+                }
+            }
+        }
+
+        const elUserName = document.getElementById('user_name');
+        const elHospitalEmail = document.getElementById('hospital-email');
+
+        if (elUserName) elUserName.textContent = nomHopital || 'Hôpital Général';
+        if (elHospitalEmail) elHospitalEmail.textContent = emailHopital || 'coordination@hgy.cm';
+
+        const btnLogout = document.getElementById('btn-logout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'connexion.html';
+            });
+        }
+    }
+
+    // Formatage visuel selon le statut d'expédition
+    function ObtenirBadgeStatut(statut) {
+        const str = (statut || '').toLowerCase();
+        if (str.includes('transit') || str.includes('cours')) {
+            return `<span style="background:#fff3e0; color:#e65100; padding:4px 8px; border-radius:4px; font-weight:600;"><i class="fa-solid fa-truck-fast"></i> ${escapeHtml(statut)}</span>`;
+        } else if (str.includes('livr') || str.includes('reç') || str.includes('valid')) {
+            return `<span style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:4px; font-weight:600;"><i class="fa-solid fa-check-double"></i> ${escapeHtml(statut)}</span>`;
+        } else if (str.includes('annul') || str.includes('echec')) {
+            return `<span style="background:#ffebee; color:#c62828; padding:4px 8px; border-radius:4px; font-weight:600;"><i class="fa-solid fa-xmark"></i> ${escapeHtml(statut)}</span>`;
+        }
+        return `<span style="background:#e3f2fd; color:#1565c0; padding:4px 8px; border-radius:4px; font-weight:600;"><i class="fa-solid fa-clock"></i> ${escapeHtml(statut || 'En attente')}</span>`;
+    }
+
+    // 2. Appel AJAX vers l'API PHP expedition.php (SANS CACHE)
+    function chargerDonnees() {
+        const tbody = document.getElementById('tbody-assignations');
+        const iconRefresh = document.getElementById('icon-refresh');
+        
+        // Afficher l'animation de chargement
+        if (iconRefresh) iconRefresh.classList.add('fa-spin');
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Actualisation des données...
+        </td></tr>`;
+
+        // Ajout d'un paramètre timestamp (_t) pour forcer le contournement du cache
+        const timestamp = new Date().getTime();
+        
+        fetch('expedition.php?_t=' + timestamp, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (iconRefresh) iconRefresh.classList.remove('fa-spin');
+            tbody.innerHTML = '';
+
+            if (!result.success) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red; padding:20px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> ${escapeHtml(result.message)}
+                </td></tr>`;
+                return;
+            }
+
+            if (!result.data || result.data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px;">
+                    Aucun greffon matché à afficher pour le moment.
+                </td></tr>`;
+                return;
+            }
+
+            result.data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>#${escapeHtml(row.code_greffon || row.id_assignation)}</strong></td>
+                    <td><i class="fa-solid fa-heart-pulse text-blue"></i> ${escapeHtml(row.organe)}</td>
+                    <td>${escapeHtml(row.donneur)}</td>
+                    <td><span class="badge">${escapeHtml(row.groupe_sanguin)}</span></td>
+                    <td><strong>${escapeHtml(row.nom_patient)}</strong> (${escapeHtml(row.code_patient)})</td>
+                    <td>${escapeHtml(row.hopital_destination)}</td>
+                    <td>${escapeHtml(row.date_assignation || 'Date inconnue')}</td>
+                    <td>${ObtenirBadgeStatut(row.statut)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            // Réappliquer le filtre si une recherche était active
+            filtrerTableau();
+        })
+        .catch(error => {
+            if (iconRefresh) iconRefresh.classList.remove('fa-spin');
+            console.error('Erreur Fetch:', error);
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red; padding:20px;">
+                Erreur réseau lors de la récupération des données.
+            </td></tr>`;
+        });
+    }
+
+    // 3. Recherche / Filtre dans le tableau
+    function filtrerTableau() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("table-assignations");
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            let tdArray = tr[i].getElementsByTagName("td");
+            let match = false;
+            
+            // Si la ligne ne contient qu'une seule cellule (message d'erreur ou chargement), ne pas masquer
+            if (tdArray.length <= 1) continue;
+
+            for (let j = 0; j < tdArray.length; j++) {
+                if (tdArray[j] && (tdArray[j].innerText || tdArray[j].textContent).toUpperCase().indexOf(filter) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+            tr[i].style.display = match ? "" : "none";
+        }
+    }
+    </script>
+    <script src="navigation.js"></script>
+</body>
+</html>
