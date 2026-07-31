@@ -1,4 +1,7 @@
 {
     "name": "aurey/organes",
-    "require": {}
+    "require": {
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+    }
 }
