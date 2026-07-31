@@ -1,14 +1,14 @@
 <?php
-// On récupère les valeurs depuis n'importe quelle superglobale disponible
+// On essaie de lire les variables système, sinon on prend les valeurs de Railway
 $host     = $_ENV['mysql.railway.internal']     ?? $_SERVER['mysql.railway.internal']     ?? getenv('mysql.railway.internal')     ?: null;
 $port     = $_ENV['3306']     ?? $_SERVER['3306']     ?? getenv('3306')     ?: '3306';
 $dbname   = $_ENV['railway'] ?? $_SERVER['railway'] ?? getenv('railway') ?: null;
 $user     = $_ENV['root']     ?? $_SERVER['root']     ?? getenv('root')     ?: null;
 $password = $_ENV['sABgKYFMXbouPClzlIBQlDrxLZogXxEL'] ?? $_SERVER['sABgKYFMXbouPClzlIBQlDrxLZogXxEL'] ?? getenv('sABgKYFMXbouPClzlIBQlDrxLZogXxEL') ?: null;
 
-// Si Railway n'a pas transmis MYSQLHOST, on affiche un message d'aide clair au lieu de planter sur localhost
-if (!$host) {
-    die("<b>Erreur de configuration :</b> Les variables d'environnement MySQL ne sont pas reçues par le service PHP.<br>Vérifiez l'onglet Variables dans Railway.");
+// Sécurité si la valeur host est toujours manquante
+if ($host === 'Mettre_Ici_La_Valeur_De_MYSQLHOST') {
+    die("<b>Erreur :</b> Pensez à remplacer 'Mettre_Ici_La_Valeur_De_MYSQLHOST' dans db.php par le vrai nom d'hôte copié sur Railway.");
 }
 
 try {
